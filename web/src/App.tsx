@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import './App.css';
-import { useDispatch, useSelector } from "react-redux";
-import { createUser, selectUser } from "./store/user/actions";
+import {useDispatch, useSelector} from "react-redux";
+import {createUser, selectUser} from "./store/user/actions";
 
 function App() {
     const dispatch = useDispatch();
