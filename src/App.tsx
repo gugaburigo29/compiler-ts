@@ -1,7 +1,9 @@
 import React, {useEffect} from 'react';
-import './App.css';
 import {useDispatch, useSelector} from "react-redux";
 import {createUser, selectUser} from "./store/user/actions";
+
+import './App.css';
+import MainLayout from './layouts/MainLayout';
 
 function App() {
     const dispatch = useDispatch();
@@ -12,9 +14,11 @@ function App() {
     }, []);
 
     return (
-        <div>
-            {user?.description}
-        </div>
+        <MainLayout>
+            <div>
+                {user?.description}
+            </div>
+        </MainLayout>
     );
 }
 

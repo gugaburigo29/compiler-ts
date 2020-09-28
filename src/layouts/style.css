@@ -1,0 +1,37 @@
+#main-div {
+    height: 100vh;
+    max-height: 100vh;
+    display: grid;
+    grid-template-areas: 
+    "Header Header Header Header"
+    "Content Content Content Sider"
+    "Content Content Content Sider"
+    "Content Content Content Sider"
+    "Footer Footer Footer Sider"
+    "Footer Footer Footer Sider";
+}
+
+#top-div {
+    grid-area: Header;
+    background-color: red;
+}
+
+#middle-div {
+    display: flex;
+    width: 100%;
+    background-color: grey;
+}
+
+#content-div {
+    grid-area: Content;
+    background-color:seashell;
+}
+
+#sider-div {
+    grid-area: Sider;
+}
+
+#bottom-div {
+    grid-area: Footer;
+    background-color: purple;
+}
