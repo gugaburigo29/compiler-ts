@@ -7,6 +7,8 @@ import {store} from "./store";
 import {ThemeProvider} from "styled-components";
 import theme from "./styles/themes/mainTheme";
 
+import "antd/dist/antd.css";
+
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
