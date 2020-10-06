@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {createUser, selectUser} from "./store/user/actions";
 import {Layout, Table} from "antd";
 import { FooterComponent, HeaderComponent, SiderTable, TextAreaComponent } from './styles/styles';
-import TextArea from 'antd/lib/input/TextArea';
+import { FolderOpenFilled, PlaySquareFilled, SaveFilled } from "@ant-design/icons"
 
 const {Sider, Content} = Layout;
 
@@ -42,7 +42,9 @@ function App() {
     return (
         <Layout style={{height: '100%'}}>
             <HeaderComponent>
-                HeaderComponent
+                <FolderOpenFilled />
+                <SaveFilled />
+                <PlaySquareFilled />
             </HeaderComponent>
             <Layout>
                 <Layout>

@@ -4,7 +4,9 @@ import {Layout} from "antd";
 const { Header, Footer } = Layout;
 
 export const HeaderComponent = styled(Header)`
-    height: 24px;
+    background-color: white;
+    height: 20px;
+    display: flex;
 `;
 
 export const SiderTable = styled.div `
