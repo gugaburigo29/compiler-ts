@@ -1,9 +1,35 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {createUser, selectUser} from "./store/user/actions";
-import {Layout} from "antd";
+import {Layout, Table} from "antd";
+import { FooterComponent, HeaderComponent, SiderTable, TextAreaComponent } from './styles/styles';
+import TextArea from 'antd/lib/input/TextArea';
 
-const {Header, Footer, Sider, Content} = Layout;
+const {Sider, Content} = Layout;
+
+const columnsTableTop = [
+    {
+        title: 'Código',
+        dataIndex: 'Codigo'
+    }, 
+    {
+        title: 'Palavra',
+        dataIndex: 'Palavra'
+    }
+];
+
+const dataTableTop = [
+    {
+        key: '1',
+        Codigo: 52,
+        Palavra: 'PROGRAMA'
+    }, 
+    {
+        key: '2',
+        Codigo: 53,
+        Palavra: 'END'
+    }
+];
 
 function App() {
     const dispatch = useDispatch();
@@ -15,12 +41,25 @@ function App() {
 
     return (
         <Layout style={{height: '100%'}}>
-            <Header>Header</Header>
+            <HeaderComponent>
+                HeaderComponent
+            </HeaderComponent>
             <Layout>
-                <Content>Content</Content>
-                <Sider>Sider</Sider>
+                <Layout>
+                    <Content>Content</Content>
+                    <Sider>
+                        <SiderTable>
+                            <Table columns={columnsTableTop} dataSource={dataTableTop} size="small" />
+                        </SiderTable>
+                        <SiderTable>
+                            <Table columns={columnsTableTop} dataSource={dataTableTop} size="small" />
+                        </SiderTable>
+                    </Sider>
+                </Layout>
             </Layout>
-            <Footer>Footer</Footer>
+            <FooterComponent>
+                <TextAreaComponent disabled />
+            </FooterComponent>
         </Layout>
     );
 }
