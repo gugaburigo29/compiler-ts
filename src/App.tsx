@@ -1,9 +1,10 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {createUser, selectUser} from "./store/user/actions";
 import {Layout, Table} from "antd";
 import { FooterComponent, HeaderComponent, SiderTable, TextAreaComponent } from './styles/styles';
 import { FolderOpenOutlined, PlaySquareOutlined, SaveOutlined } from "@ant-design/icons";
+import Icon from "./components/Icon";
 
 const {Sider, Content} = Layout;
 
@@ -34,17 +35,22 @@ const dataTableTop = [
 function App() {
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
+    const inputFileRef = useRef<HTMLInputElement>(null); // Pegar a ref. do componente
 
     useEffect(() => {
         dispatch(createUser());
     }, []);
 
     async function handleFileInput(target: EventTarget) {
-        debugger;
         const $target = target as HTMLInputElement;
+        let textFile = '';
         if (!$target.files) return;
     
-        const textFile = await readFile($target.files[0]);
+        try {
+            textFile = await readFile($target.files[0]);
+        } catch(e){
+            alert('Error on read file!');
+        }       
                 
         // return the text file
         console.log(textFile);
@@ -64,15 +70,22 @@ function App() {
     return (
         <Layout style={{height: '100%'}}>
             <HeaderComponent>
-                <div 
-                    id="importFile"
-                    style={{display: "flex", cursor: "pointer"}}
-                    onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {handleFileInput(e.target)}}
+                <div
+                    onClick={e => {
+                        if(!inputFileRef.current) return;
+                        inputFileRef.current.click();
+                    }}
                 >
-                    <FolderOpenOutlined />
+                    <input 
+                        type="file"
+                        hidden 
+                        ref={inputFileRef}
+                        onChange = {e => handleFileInput(e.target)}
+                    />
+                    <Icon icon={<FolderOpenOutlined />} size={20} />
                 </div>
-                <SaveOutlined style={{cursor: "pointer"}}/>
-                <PlaySquareOutlined style={{cursor: "pointer"}}/>
+                <Icon icon={<SaveOutlined />} size={20} />
+                <Icon icon={<PlaySquareOutlined />} size={20} />
             </HeaderComponent>
             <Layout>
                 <Layout>
