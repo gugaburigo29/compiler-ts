@@ -1,34 +1,43 @@
-import React, {ChangeEvent, FormEvent, useEffect, useState} from "react";
+import React, {ChangeEvent, FormEvent, useEffect, useRef, useState} from "react";
 import {Container, ItemCounter, LineCounter, TextArea} from "./styles";
+import {useDispatch, useSelector} from "react-redux";
+import {selectCode, selectLines, setTextCode} from "../../store/editor/actions";
 
 function Editor() {
-    const [value, setValue] = useState('');
-    const [lines, setLines] = useState(0)
+    const dispatch = useDispatch();
+
+    const [height, setHeight] = useState<number | undefined>(undefined);
+
+    const lines = useSelector(selectLines)
+    const code = useSelector(selectCode)
+
+    const lineCounterRef = useRef<HTMLDivElement>(null);
+
+
 
     /**
-     * Count lines in string
+     * Set height from iframe
      */
     useEffect(() => {
-        const {length} = value.split('\n');
-        console.log(value)
-        setLines(length);
-    }, [value]);
+        setHeight(lineCounterRef.current?.offsetHeight);
+    }, [lineCounterRef.current?.offsetHeight]);
 
     // @ts-ignore
     return (
         <Container>
-            <LineCounter>
+            <LineCounter ref={lineCounterRef}>
                 {new Array(lines).fill(0).map((_, index) => (
                     <ItemCounter>{index + 1}</ItemCounter>
                 ))}
             </LineCounter>
             <TextArea
-                contentEditable
-                onInput={ (event: FormEvent<HTMLDivElement>) => {
+                style={{
+                    height: height
+                }}
+                value={code}
+                onInput={e => {
                     // @ts-ignore
-                    console.log(event.target.innerText);
-                    // @ts-ignore
-                    setValue(event.target.innerText)
+                    dispatch(setTextCode(e.target.value));
                 }}
             />
         </Container>

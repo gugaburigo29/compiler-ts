@@ -6,9 +6,11 @@ import {
     combineReducers,
 } from '@reduxjs/toolkit';
 import userReducer from "./user/slices";
+import editorReducer from "./editor/slices";
 
 const rootReducer = combineReducers({
     user: userReducer,
+    editor: editorReducer,
 });
 
 const storeConfig: ConfigureStoreOptions = {
