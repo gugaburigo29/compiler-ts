@@ -4,6 +4,7 @@ import {createUser, selectUser} from "./store/user/actions";
 import {Layout, Table} from "antd";
 import { FooterComponent, HeaderComponent, SiderTable, TextAreaComponent } from './styles/styles';
 import { FolderOpenFilled, PlaySquareFilled, SaveFilled } from "@ant-design/icons"
+import Editor from "./components/Editor/";
 
 const {Sider, Content} = Layout;
 
@@ -11,7 +12,7 @@ const columnsTableTop = [
     {
         title: 'Código',
         dataIndex: 'Codigo'
-    }, 
+    },
     {
         title: 'Palavra',
         dataIndex: 'Palavra'
@@ -23,7 +24,7 @@ const dataTableTop = [
         key: '1',
         Codigo: 52,
         Palavra: 'PROGRAMA'
-    }, 
+    },
     {
         key: '2',
         Codigo: 53,
@@ -48,7 +49,9 @@ function App() {
             </HeaderComponent>
             <Layout>
                 <Layout>
-                    <Content>Content</Content>
+                    <Content>
+                        <Editor/>
+                    </Content>
                     <Sider>
                         <SiderTable>
                             <Table columns={columnsTableTop} dataSource={dataTableTop} size="small" />
