@@ -2,10 +2,11 @@ import React, {useEffect, useRef} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {createUser, selectUser} from "./store/user/actions";
 import {Layout, Table} from "antd";
-import { FooterComponent, HeaderComponent, SiderTable, TextAreaComponent } from './styles/styles';
+import {FooterComponent, HeaderComponent, SiderTable, TextAreaComponent} from './styles/styles';
 import Editor from "./components/Editor/";
-import { FolderOpenOutlined, PlaySquareOutlined, SaveOutlined } from "@ant-design/icons";
+import {FolderOpenOutlined, PlaySquareOutlined, SaveOutlined} from "@ant-design/icons";
 import Icon from "./components/Icon";
+import {selectCode, setTextCode} from "./store/editor/actions";
 
 const {Sider, Content} = Layout;
 
@@ -36,6 +37,7 @@ const dataTableTop = [
 function App() {
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
+    const code = useSelector(selectCode);
     const inputFileRef = useRef<HTMLInputElement>(null); // Pegar a ref. do componente
 
     useEffect(() => {
@@ -49,12 +51,11 @@ function App() {
 
         try {
             textFile = await readFile($target.files[0]);
-        } catch(e){
+        } catch (e) {
             alert('Error on read file!');
         }
 
-        // return the text file
-        console.log(textFile);
+        dispatch(setTextCode(textFile));
     }
 
     async function readFile(file: File): Promise<string> {
@@ -68,12 +69,25 @@ function App() {
         });
     }
 
+    function download(code: string) {
+        const element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(code));
+        element.setAttribute('download', 'file.txt');
+
+        element.style.display = 'none';
+        document.body.appendChild(element);
+
+        element.click();
+
+        document.body.removeChild(element);
+    }
+
     return (
         <Layout style={{height: '100%'}}>
             <HeaderComponent>
                 <div
                     onClick={e => {
-                        if(!inputFileRef.current) return;
+                        if (!inputFileRef.current) return;
                         inputFileRef.current.click();
                     }}
                 >
@@ -81,12 +95,14 @@ function App() {
                         type="file"
                         hidden
                         ref={inputFileRef}
-                        onChange = {e => handleFileInput(e.target)}
+                        onChange={e => handleFileInput(e.target)}
                     />
-                    <Icon icon={<FolderOpenOutlined />} size={20} />
+                    <Icon icon={<FolderOpenOutlined/>} size={20}/>
                 </div>
-                <Icon icon={<SaveOutlined />} size={20} />
-                <Icon icon={<PlaySquareOutlined />} size={20} />
+                <div onClick={() => download(code)}>
+                    <Icon icon={<SaveOutlined/>} size={20}/>
+                </div>
+                <Icon icon={<PlaySquareOutlined/>} size={20}/>
             </HeaderComponent>
             <Layout>
                 <Layout>
@@ -95,16 +111,16 @@ function App() {
                     </Content>
                     <Sider>
                         <SiderTable>
-                            <Table columns={columnsTableTop} dataSource={dataTableTop} size="small" />
+                            <Table columns={columnsTableTop} dataSource={dataTableTop} size="small"/>
                         </SiderTable>
                         <SiderTable>
-                            <Table columns={columnsTableTop} dataSource={dataTableTop} size="small" />
+                            <Table columns={columnsTableTop} dataSource={dataTableTop} size="small"/>
                         </SiderTable>
                     </Sider>
                 </Layout>
             </Layout>
             <FooterComponent>
-                <TextAreaComponent disabled />
+                <TextAreaComponent disabled/>
             </FooterComponent>
         </Layout>
     );
