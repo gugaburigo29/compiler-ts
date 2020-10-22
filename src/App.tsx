@@ -82,6 +82,10 @@ function App() {
         document.body.removeChild(element);
     }
 
+    function handleCompileFile(){
+        // implement the compilation
+    }
+
     return (
         <Layout style={{height: '100%'}}>
             <HeaderComponent>
@@ -102,7 +106,9 @@ function App() {
                 <div onClick={() => download(code)}>
                     <Icon icon={<SaveOutlined/>} size={20}/>
                 </div>
-                <Icon icon={<PlaySquareOutlined/>} size={20}/>
+                <div onClick={handleCompileFile}>
+                    <Icon icon={<PlaySquareOutlined/>} size={20}/>
+                </div>
             </HeaderComponent>
             <Layout>
                 <Layout>
