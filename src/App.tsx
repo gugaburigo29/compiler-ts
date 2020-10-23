@@ -96,17 +96,24 @@ function App() {
 
         codeToAnalyze.forEach((line: string, lineNumber: number) => {
             let lineSplited = line.split('');
-            let lengthSineSplited = lineSplited.length;
+            let lengthLineSplited = lineSplited.length;
             let words: Array<string> = [];
             let word: string = '';
+            debugger
 
             lineSplited.forEach((letter: string, index: number) => {
-                if (gramaticClass.Delimitres.includes(letter)){
+                debugger
+                if (gramaticClass.WordDelimiters.includes(letter)){
                     words.push(word);
+
+                    // Make sure it's not a blank space
+                    if(letter.trim().length) {
+                        words.push(letter);
+                    }
 
                     word = '';
                 // check if it's the last character / index starts at 0
-                } else if ((index + 1) === lengthSineSplited){
+                } else if ((index + 1) === lengthLineSplited){
                     word += letter;
 
                     words.push(word);
