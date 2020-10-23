@@ -1,5 +1,6 @@
-class Gramatic {
+const Gramatic = class {
     Gramatics = new Map();
+    Delimitres = [" ", "\n"];
 
     constructor(){
         this.inicializa();
@@ -63,4 +64,10 @@ class Gramatic {
         this.Gramatics.set(51, "$");
     }
 
+    getGramatic(){
+        return this.Gramatics;
+    }
+
 }
+
+export default Gramatic;

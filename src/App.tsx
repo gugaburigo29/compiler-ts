@@ -7,6 +7,7 @@ import Editor from "./components/Editor/";
 import {FolderOpenOutlined, PlaySquareOutlined, SaveOutlined} from "@ant-design/icons";
 import Icon from "./components/Icon";
 import {selectCode, setTextCode} from "./store/editor/actions";
+import Gramatic from './gramatic/Gramatic';
 
 const {Sider, Content} = Layout;
 
@@ -34,11 +35,18 @@ const dataTableTop = [
     }
 ];
 
+interface GramaticProps {
+    lineNumber: number;
+    value: string;
+    identificationCode: number;
+}
+
 function App() {
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
     const code = useSelector(selectCode);
-    const inputFileRef = useRef<HTMLInputElement>(null); // Pegar a ref. do componente
+    const inputFileRef = useRef<HTMLInputElement>(null); // Take the ref. of component
+    const gramatic = new Gramatic();
 
     useEffect(() => {
         dispatch(createUser());
@@ -83,7 +91,41 @@ function App() {
     }
 
     function handleCompileFile(){
-        // implement the compilation
+        let codeToAnalyze: Array<string> = code.split('\n');
+        let classifiedGramatic: Array<GramaticProps> = [];
+
+        codeToAnalyze.forEach((line: string, lineNumber: number) => {
+            let lineSplited = line.split('');
+            let lengthSineSplited = lineSplited.length;
+            let words: Array<string> = [];
+            let word: string = '';
+
+            lineSplited.forEach((letter: string, index: number) => {
+                if (gramatic.Delimitres.includes(letter)){
+                    words.push(word);
+
+                    word = '';
+                // check if it's the last character / index starts at 0
+                } else if ((index + 1) === lengthSineSplited){
+                    word += letter;
+
+                    words.push(word);
+                } else {
+                    word += letter;
+                }
+            });
+
+            words.forEach((token: string) => {
+                classifiedGramatic.push({
+                    lineNumber: ++lineNumber,
+                    value: token,
+                    identificationCode: 0
+                });
+            });            
+        });
+        
+
+        console.log('classifiedGramatic', classifiedGramatic);
     }
 
     return (
