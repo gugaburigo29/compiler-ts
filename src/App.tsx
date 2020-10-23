@@ -46,7 +46,7 @@ function App() {
     const user = useSelector(selectUser);
     const code = useSelector(selectCode);
     const inputFileRef = useRef<HTMLInputElement>(null); // Take the ref. of component
-    const gramatic = new Gramatic();
+    const gramaticClass = new Gramatic();
 
     useEffect(() => {
         dispatch(createUser());
@@ -101,7 +101,7 @@ function App() {
             let word: string = '';
 
             lineSplited.forEach((letter: string, index: number) => {
-                if (gramatic.Delimitres.includes(letter)){
+                if (gramaticClass.Delimitres.includes(letter)){
                     words.push(word);
 
                     word = '';
@@ -117,9 +117,9 @@ function App() {
 
             words.forEach((token: string) => {
                 classifiedGramatic.push({
-                    lineNumber: ++lineNumber,
+                    lineNumber: lineNumber + 1,
                     value: token,
-                    identificationCode: 0
+                    identificationCode: gramaticClass.getTokenIdentificationCode(token)
                 });
             });            
         });

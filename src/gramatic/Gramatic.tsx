@@ -1,5 +1,5 @@
 const Gramatic = class {
-    Gramatics = new Map();
+    Gramatics = new Map<string, number>();
     Delimitres = [" ", "\n"];
 
     constructor(){
@@ -11,61 +11,65 @@ const Gramatic = class {
     }
 
     setGramatic(){
-        this.Gramatics.set(1, "Program ");
-        this.Gramatics.set(2, "Label ");
-        this.Gramatics.set(3, "Const ");
-        this.Gramatics.set(4, "Var");
-        this.Gramatics.set(5, "Procedure ");
-        this.Gramatics.set(6, "Begin ");
-        this.Gramatics.set(7, "End ");
-        this.Gramatics.set(8, "Integer");
-        this.Gramatics.set(9, "Array ");
-        this.Gramatics.set(10, "Of ");
-        this.Gramatics.set(11, "Call ");
-        this.Gramatics.set(12, "Goto ");
-        this.Gramatics.set(13, "If ");
-        this.Gramatics.set(14, "Then ");
-        this.Gramatics.set(15, "Else");
-        this.Gramatics.set(16, "While ");
-        this.Gramatics.set(17, "Do ");
-        this.Gramatics.set(18, "Repeat ");
-        this.Gramatics.set(19, "Until ");
-        this.Gramatics.set(20, "Readln ");
-        this.Gramatics.set(21, "Writeln ");
-        this.Gramatics.set(22, "Or ");
-        this.Gramatics.set(23, "And ");
-        this.Gramatics.set(24, "Not");
-        this.Gramatics.set(25, "Identificador");
-        this.Gramatics.set(26, "Inteiro ");
-        this.Gramatics.set(27, "For");
-        this.Gramatics.set(28, "To ");
-        this.Gramatics.set(29, "Case ");
-        this.Gramatics.set(30, "+ ");
-        this.Gramatics.set(31, "- ");
-        this.Gramatics.set(32, "* ");
-        this.Gramatics.set(33, "/ ");
-        this.Gramatics.set(34, "[ ");
-        this.Gramatics.set(35, "] ");
-        this.Gramatics.set(36, "( ");
-        this.Gramatics.set(37, ") ");
-        this.Gramatics.set(38, ":= ");
-        this.Gramatics.set(39, ": ");
-        this.Gramatics.set(40, "= ");
-        this.Gramatics.set(41, ">");
-        this.Gramatics.set(42, ">=");
-        this.Gramatics.set(43, "<");
-        this.Gramatics.set(44, "<=");
-        this.Gramatics.set(45, "< >");
-        this.Gramatics.set(46, ",");
-        this.Gramatics.set(47, ";");
-        this.Gramatics.set(48, "literal");
-        this.Gramatics.set(49, ".");
-        this.Gramatics.set(50, ".. ");
-        this.Gramatics.set(51, "$");
+        this.Gramatics.set("PROGRAM", 1);
+        this.Gramatics.set("LABEL", 2);
+        this.Gramatics.set("CONST", 3);
+        this.Gramatics.set("VAR", 4);
+        this.Gramatics.set("PROCEDURE", 5);
+        this.Gramatics.set("BEGIN", 6);
+        this.Gramatics.set("END", 7);
+        this.Gramatics.set("INTEGER", 8);
+        this.Gramatics.set("ARRAY", 9);
+        this.Gramatics.set("OF", 1);
+        this.Gramatics.set("CALL", 1);
+        this.Gramatics.set("GOTO", 1);
+        this.Gramatics.set("IF", 1);
+        this.Gramatics.set("THEN", 1);
+        this.Gramatics.set("ELSE", 1);
+        this.Gramatics.set("WHILE", 1);
+        this.Gramatics.set("DO", 1);
+        this.Gramatics.set("REPEAT", 1);
+        this.Gramatics.set("UNTIL", 1);
+        this.Gramatics.set("READLN", 2);
+        this.Gramatics.set("WRITELN", 2);
+        this.Gramatics.set("OR", 2);
+        this.Gramatics.set("AND", 2);
+        this.Gramatics.set("NOT", 2);
+        this.Gramatics.set("IDENTIFICADOR", 2);
+        this.Gramatics.set("INTEIRO", 2);
+        this.Gramatics.set("FOR", 2);
+        this.Gramatics.set("TO", 2);
+        this.Gramatics.set("CASE", 2);
+        this.Gramatics.set("+", 3);
+        this.Gramatics.set("-", 3);
+        this.Gramatics.set("*", 3);
+        this.Gramatics.set("/", 3);
+        this.Gramatics.set("[", 3);
+        this.Gramatics.set("]", 3);
+        this.Gramatics.set("(", 3);
+        this.Gramatics.set(")", 3);
+        this.Gramatics.set(":=", 3);
+        this.Gramatics.set(":", 3);
+        this.Gramatics.set("=", 4);
+        this.Gramatics.set(">", 4);
+        this.Gramatics.set(">=", 4);
+        this.Gramatics.set("<", 4);
+        this.Gramatics.set("<=", 4);
+        this.Gramatics.set("< >", 4);
+        this.Gramatics.set(",", 4);
+        this.Gramatics.set(";", 4);
+        this.Gramatics.set("LITERAL", 4);
+        this.Gramatics.set(".", 4);
+        this.Gramatics.set("..", 5);
+        this.Gramatics.set("$", 5);
     }
 
     getGramatic(){
         return this.Gramatics;
+    }
+
+    getTokenIdentificationCode(token: string) : number{
+        return this.Gramatics.get(token.toUpperCase()) || 0;
     }
 
 }
