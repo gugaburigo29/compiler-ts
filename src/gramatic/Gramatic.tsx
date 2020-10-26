@@ -1,7 +1,9 @@
 const Gramatic = class {
     Gramatics = new Map<string, number>();
-    LineDelimiters = ["\n", ";"];
-    WordDelimiters = [" ", ","];
+    LineDelimiters = [";"];
+    WordDelimiters = ["", ","];
+    CommentCharacterStart = "(*";
+    CommentCharacterEnd = "*)";
 
     constructor(){
         this.inicializa();

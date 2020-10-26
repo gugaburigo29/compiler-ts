@@ -7,10 +7,12 @@ import {
 } from '@reduxjs/toolkit';
 import userReducer from "./user/slices";
 import editorReducer from "./editor/slices";
+import tableReducer from "./table/slices";
 
 const rootReducer = combineReducers({
     user: userReducer,
     editor: editorReducer,
+    table: tableReducer
 });
 
 const storeConfig: ConfigureStoreOptions = {

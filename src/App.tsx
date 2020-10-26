@@ -1,26 +1,16 @@
 import React, {useEffect, useRef} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {createUser, selectUser} from "./store/user/actions";
-import {Layout, Table} from "antd";
+import {Layout} from "antd";
 import {FooterComponent, HeaderComponent, SiderTable, TextAreaComponent} from './styles/styles';
 import Editor from "./components/Editor/";
 import {FolderOpenOutlined, PlaySquareOutlined, SaveOutlined} from "@ant-design/icons";
 import Icon from "./components/Icon";
 import {selectCode, setTextCode} from "./store/editor/actions";
 import Gramatic from './gramatic/Gramatic';
+import TableComponent from './components/Table';
 
 const {Sider, Content} = Layout;
-
-const columnsTableTop = [
-    {
-        title: 'Código',
-        dataIndex: 'Codigo'
-    },
-    {
-        title: 'Palavra',
-        dataIndex: 'Palavra'
-    }
-];
 
 const dataTableTop = [
     {
@@ -93,31 +83,38 @@ function App() {
     function handleCompileFile(){
         let codeToAnalyze: Array<string> = code.split('\n');
         let classifiedGramatic: Array<GramaticProps> = [];
-
+        debugger
         codeToAnalyze.forEach((line: string, lineNumber: number) => {
             let lineSplited = line.split('');
-            let lengthLineSplited = lineSplited.length;
+            //let lengthLineSplited = lineSplited.length;
             let words: Array<string> = [];
             let word: string = '';
-            debugger
+            let isComment: boolean = false;
+            
+            lineSplited.forEach((letter: string) => {
+                letter = letter.trim();
 
-            lineSplited.forEach((letter: string, index: number) => {
-                debugger
-                if (gramaticClass.WordDelimiters.includes(letter)){
-                    words.push(word);
-
-                    // Make sure it's not a blank space
-                    if(letter.trim().length) {
-                        words.push(letter);
+                if (isComment) {
+                    if (((word.charAt(word.length - 1) + letter).includes(gramaticClass.CommentCharacterEnd))) {
+                        isComment = false;
+                    }
+                } else if (((word.charAt(word.length - 1) + letter).includes(gramaticClass.CommentCharacterStart))) {
+                    isComment = true
+                } else if ((gramaticClass.WordDelimiters.includes(letter) ||
+                    gramaticClass.LineDelimiters.includes(letter))) {
+                    if (word.length){
+                        words.push(word);
+                        word = '';
                     }
 
-                    word = '';
-                // check if it's the last character / index starts at 0
-                } else if ((index + 1) === lengthLineSplited){
-                    word += letter;
-
-                    words.push(word);
-                } else {
+                    // Take the delimiter only if it is not a blank space
+                    if(letter.length) {
+                        words.push(letter);
+                    }
+                    //(word.lastIndexOf + letter).includes(gramaticClass.CommentCharacter[0])
+                } else if (((word.charAt(word.length - 1) + letter).includes(gramaticClass.CommentCharacterStart))) {
+                    isComment = true
+                }  else if (letter.length) {
                     word += letter;
                 }
             });
@@ -166,10 +163,10 @@ function App() {
                     </Content>
                     <Sider>
                         <SiderTable>
-                            <Table columns={columnsTableTop} dataSource={dataTableTop} size="small"/>
+                            <TableComponent />
                         </SiderTable>
                         <SiderTable>
-                            <Table columns={columnsTableTop} dataSource={dataTableTop} size="small"/>
+                            {/* <Table columns={columnsTableTop} dataSource={dataTableTop} size="small"/> */}
                         </SiderTable>
                     </Sider>
                 </Layout>
