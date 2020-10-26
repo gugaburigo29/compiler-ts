@@ -72,7 +72,17 @@ const Gramatic = class {
     }
 
     getTokenIdentificationCode(token: string) : number{
-        return this.Gramatics.get(token.toUpperCase()) || 0;
+        let code  = this.Gramatics.get(token.toUpperCase()) || 0;
+
+        if (!code) {
+            if (isNaN(parseInt(token))) {
+                code = this.Gramatics.get('IDENTIFICADOR') || 25;
+            } else {
+                code = this.Gramatics.get('INTEIRO') || 26;
+            }
+        }
+
+        return code;
     }
 
 }
