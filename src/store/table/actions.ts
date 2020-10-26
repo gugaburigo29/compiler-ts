@@ -3,7 +3,7 @@ import {AppThunk, RootState} from "../index";
 
 const {setCode, setWord} = tableSlice.actions;
 
-interface TokenInterface {
+export interface TokenInterface {
     code: number;
     word: string;
 }

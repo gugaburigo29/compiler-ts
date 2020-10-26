@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {createUser, selectUser} from "./store/user/actions";
 import {Layout} from "antd";
@@ -9,6 +9,7 @@ import Icon from "./components/Icon";
 import {selectCode, setTextCode} from "./store/editor/actions";
 import Gramatic from './gramatic/Gramatic';
 import TableComponent from './components/Table';
+import {TokenInterface} from "./store/table/actions";
 
 const {Sider, Content} = Layout;
 
@@ -37,6 +38,8 @@ function App() {
     const code = useSelector(selectCode);
     const inputFileRef = useRef<HTMLInputElement>(null); // Take the ref. of component
     const gramaticClass = new Gramatic();
+
+    const [tokens, setTokens] = useState<TokenInterface[]>([]);
 
     useEffect(() => {
         dispatch(createUser());
@@ -80,7 +83,7 @@ function App() {
         document.body.removeChild(element);
     }
 
-    function handleCompileFile(){
+    function handleCompileFile() {
         let codeToAnalyze: Array<string> = code.split('\n');
         let classifiedGramatic: Array<GramaticProps> = [];
         let isComment: boolean = false;
@@ -91,7 +94,7 @@ function App() {
             let word: string = '';
             let previousLetter: string = '';
             let lengthLineSplited: number = lineSplited.length;
-            
+
             lineSplited.forEach((letter: string, index: number) => {
                 letter = letter.trim();
 
@@ -101,23 +104,23 @@ function App() {
                     }
                 } else if (((previousLetter + letter).includes(gramaticClass.CommentCharacterStart))) {
                     isComment = true;
-                    
+
                     word = '';
                 } else if (gramaticClass.WordDelimiters.includes(letter) ||
-                            gramaticClass.LineDelimiters.includes(letter)) {
-                    
-                    if (word.length){
+                    gramaticClass.LineDelimiters.includes(letter)) {
+
+                    if (word.length) {
                         words.push(word);
                     }
                     word = '';
 
                     // Take the delimiter only if it is not a blank space
-                    if(letter.length) {
+                    if (letter.length) {
                         words.push(letter);
                     }
-                // Check if is the last character
+                    // Check if is the last character
                 } else if (lengthLineSplited === (index + 1)) {
-                    if (word.length){
+                    if (word.length) {
                         words.push(word + letter);
                         word = '';
                     }
@@ -134,10 +137,15 @@ function App() {
                     value: token,
                     identificationCode: gramaticClass.getTokenIdentificationCode(token)
                 });
-            });            
+            });
         });
-        
-        console.log('classifiedGramatic', classifiedGramatic);
+
+        const tokens: TokenInterface[] = classifiedGramatic.map(value => ({
+            code: value.identificationCode,
+            word: value.value
+        }));
+
+        setTokens(tokens);
     }
 
     return (
@@ -169,9 +177,9 @@ function App() {
                     <Content>
                         <Editor/>
                     </Content>
-                    <Sider>
+                    <Sider style={{backgroundColor: 'white', overflowY: 'scroll'}}>
                         <SiderTable>
-                            <TableComponent />
+                            <TableComponent tokens={tokens}/>
                         </SiderTable>
                         <SiderTable>
                             {/* <Table columns={columnsTableTop} dataSource={dataTableTop} size="small"/> */}
