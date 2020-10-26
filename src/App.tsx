@@ -83,40 +83,49 @@ function App() {
     function handleCompileFile(){
         let codeToAnalyze: Array<string> = code.split('\n');
         let classifiedGramatic: Array<GramaticProps> = [];
+        let isComment: boolean = false;
         debugger
         codeToAnalyze.forEach((line: string, lineNumber: number) => {
             let lineSplited = line.split('');
-            //let lengthLineSplited = lineSplited.length;
             let words: Array<string> = [];
             let word: string = '';
-            let isComment: boolean = false;
+            let previousLetter: string = '';
+            let lengthLineSplited: number = lineSplited.length;
             
-            lineSplited.forEach((letter: string) => {
+            lineSplited.forEach((letter: string, index: number) => {
                 letter = letter.trim();
 
                 if (isComment) {
-                    if (((word.charAt(word.length - 1) + letter).includes(gramaticClass.CommentCharacterEnd))) {
+                    if (((previousLetter + letter).includes(gramaticClass.CommentCharacterEnd))) {
                         isComment = false;
                     }
-                } else if (((word.charAt(word.length - 1) + letter).includes(gramaticClass.CommentCharacterStart))) {
-                    isComment = true
-                } else if ((gramaticClass.WordDelimiters.includes(letter) ||
-                    gramaticClass.LineDelimiters.includes(letter))) {
+                } else if (((previousLetter + letter).includes(gramaticClass.CommentCharacterStart))) {
+                    isComment = true;
+                    
+                    word = '';
+                } else if (gramaticClass.WordDelimiters.includes(letter) ||
+                            gramaticClass.LineDelimiters.includes(letter)) {
+                    
                     if (word.length){
                         words.push(word);
-                        word = '';
                     }
+                    word = '';
 
                     // Take the delimiter only if it is not a blank space
                     if(letter.length) {
                         words.push(letter);
                     }
-                    //(word.lastIndexOf + letter).includes(gramaticClass.CommentCharacter[0])
-                } else if (((word.charAt(word.length - 1) + letter).includes(gramaticClass.CommentCharacterStart))) {
-                    isComment = true
-                }  else if (letter.length) {
+                // Check if is the last character
+                } else if (lengthLineSplited === (index + 1)) {
+                    if (word.length){
+                        words.push(word + letter);
+                        word = '';
+                    }
+                } else if (letter.length) {
                     word += letter;
                 }
+
+                previousLetter = letter;
             });
 
             words.forEach((token: string) => {
@@ -128,7 +137,6 @@ function App() {
             });            
         });
         
-
         console.log('classifiedGramatic', classifiedGramatic);
     }
 
