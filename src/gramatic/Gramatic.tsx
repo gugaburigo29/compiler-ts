@@ -1,15 +1,19 @@
 const Gramatic = class {
     Gramatics = new Map<string, number>();
+    
     LineDelimiters = [";"];
     WordDelimiters = ["", ","];
+    SpecialTokens = ["*", "/", "[", "]", "(", ")", ":=", ":", "=", ">", ">=", "<", "<=", "< >", ",", ";", ".", "$", ".."];
+    DuplicateTokens = [":", ">", "<", "."];
+
     CommentCharacterStart = "(*";
     CommentCharacterEnd = "*)";
 
     constructor(){
-        this.inicializa();
+        this.initialize();
     }
 
-    inicializa() {
+    initialize() {
         this.setGramatic();
     }
 
