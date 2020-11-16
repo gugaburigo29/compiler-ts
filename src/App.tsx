@@ -40,6 +40,7 @@ function App() {
     const gramaticClass = new Gramatic();
 
     const [tokens, setTokens] = useState<TokenInterface[]>([]);
+    const [consoleMessages, setConsoleMessages] = useState<string[]>([]);
 
     useEffect(() => {
         dispatch(createUser());
@@ -87,7 +88,7 @@ function App() {
         let codeToAnalyze: Array<string> = code.split('\n');
         let classifiedGramatic: Array<GramaticProps> = [];
         let isComment: boolean = false;
-        debugger
+
         codeToAnalyze.forEach((line: string, lineNumber: number) => {
             let lineSplited = line.split('');
             let words: Array<string> = [];
@@ -132,11 +133,23 @@ function App() {
             });
 
             words.forEach((token: string) => {
-                classifiedGramatic.push({
+                const gramatic = {
                     lineNumber: lineNumber + 1,
                     value: token,
                     identificationCode: gramaticClass.getTokenIdentificationCode(token)
-                });
+                };
+
+                if (gramatic.identificationCode === 26) {
+                    if (Number(gramatic.value) > gramaticClass.IntegerMaxValue.positive ||
+                        Number(gramatic.value) < gramaticClass.IntegerMaxValue.negative) {
+                        setConsoleMessages(messages => [...messages, `Valor inteiro na linha ${gramatic.lineNumber} inválido`]);
+                        throw new Error(`Valor inteiro na linha ${gramatic.lineNumber} inválido`);
+                    } else {
+                        classifiedGramatic.push(gramatic);
+                    }
+                } else {
+                    classifiedGramatic.push(gramatic);
+                }
             });
         });
 
@@ -168,7 +181,14 @@ function App() {
                 <div onClick={() => download(code)}>
                     <Icon icon={<SaveOutlined/>} size={20}/>
                 </div>
-                <div onClick={handleCompileFile}>
+                <div onClick={() => {
+                    try {
+                        setTokens([]);
+                        handleCompileFile();
+                    } catch (e) {
+                        console.log(e);
+                    }
+                }}>
                     <Icon icon={<PlaySquareOutlined/>} size={20}/>
                 </div>
             </HeaderComponent>
@@ -188,7 +208,9 @@ function App() {
                 </Layout>
             </Layout>
             <FooterComponent>
-                <TextAreaComponent disabled/>
+                <TextAreaComponent>
+                    {consoleMessages.map(val => <p>{val}</p>)}
+                </TextAreaComponent>
             </FooterComponent>
         </Layout>
     );

@@ -1,15 +1,19 @@
-const Gramatic = class {
+class Gramatic {
     Gramatics = new Map<string, number>();
-    
+
     LineDelimiters = [";"];
     WordDelimiters = ["", ","];
     SpecialTokens = ["*", "/", "[", "]", "(", ")", ":=", ":", "=", ">", ">=", "<", "<=", "< >", ",", ";", ".", "$", ".."];
     DuplicateTokens = [":", ">", "<", "."];
+    IntegerMaxValue = {
+        negative: -32767,
+        positive: 32767
+    };
 
     CommentCharacterStart = "(*";
     CommentCharacterEnd = "*)";
 
-    constructor(){
+    constructor() {
         this.initialize();
     }
 
@@ -17,7 +21,7 @@ const Gramatic = class {
         this.setGramatic();
     }
 
-    setGramatic(){
+    setGramatic() {
         this.Gramatics.set("PROGRAM", 1);
         this.Gramatics.set("LABEL", 2);
         this.Gramatics.set("CONST", 3);
@@ -71,12 +75,12 @@ const Gramatic = class {
         this.Gramatics.set("$", 51);
     }
 
-    getGramatic(){
+    getGramatic() {
         return this.Gramatics;
     }
 
-    getTokenIdentificationCode(token: string) : number{
-        let code  = this.Gramatics.get(token.toUpperCase()) || 0;
+    getTokenIdentificationCode(token: string): number {
+        let code = this.Gramatics.get(token.toUpperCase()) || 0;
 
         if (!code) {
             if (isNaN(parseInt(token))) {
