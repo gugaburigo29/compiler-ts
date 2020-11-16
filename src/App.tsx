@@ -142,13 +142,20 @@ function App() {
                 if (gramatic.identificationCode === 26) {
                     if (Number(gramatic.value) > gramaticClass.IntegerMaxValue.positive ||
                         Number(gramatic.value) < gramaticClass.IntegerMaxValue.negative) {
-                        setConsoleMessages(messages => [...messages, `Valor inteiro na linha ${gramatic.lineNumber} inválido`]);
                         throw new Error(`Valor inteiro na linha ${gramatic.lineNumber} inválido`);
                     } else {
                         classifiedGramatic.push(gramatic);
                     }
                 } else {
                     classifiedGramatic.push(gramatic);
+                }
+
+                if (gramatic.identificationCode === 25) {
+                    const { value, lineNumber } = gramatic;
+
+                    if (value.length > 30) {
+                        throw new Error(`O identificador ${value} na linha ${lineNumber} contem mais de 30 caracteres.`);
+                    }
                 }
             });
         });
@@ -186,7 +193,8 @@ function App() {
                         setTokens([]);
                         handleCompileFile();
                     } catch (e) {
-                        console.log(e);
+                        setConsoleMessages(messages => [...messages, e.message]);
+                        console.log(e)
                     }
                 }}>
                     <Icon icon={<PlaySquareOutlined/>} size={20}/>
