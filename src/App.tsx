@@ -107,6 +107,24 @@ function App() {
                     isComment = true;
 
                     word = '';
+                }
+                else if (gramaticClass.SpecialTokens.includes(letter)) {
+                    debugger
+                    if (gramaticClass.DuplicateTokens.includes(letter)) {
+                        if (gramaticClass.SpecialTokens.includes(previousLetter + letter)) {
+                            words.push(previousLetter + letter);
+                            word = "";
+                        } else if (word.length) {
+                            words.push(word);
+                            word = letter;
+                        }
+                    } else {
+                        if (word.length) {
+                            words.push(word);
+                            word = "";
+                        }
+                        words.push(letter);
+                    }
                 } else if (gramaticClass.WordDelimiters.includes(letter) ||
                     gramaticClass.LineDelimiters.includes(letter)) {
 
