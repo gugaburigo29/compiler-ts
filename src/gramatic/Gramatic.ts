@@ -1,5 +1,6 @@
 class Gramatic {
     Gramatics = new Map<string, number>();
+    Parsing = new Map<string, string>();
 
     LineDelimiters = [";"];
     WordDelimiters = ["", ","];
@@ -19,6 +20,7 @@ class Gramatic {
 
     initialize() {
         this.setGramatic();
+        this.setParsing();
     }
 
     setGramatic() {
@@ -91,6 +93,210 @@ class Gramatic {
         }
 
         return code;
+    }
+
+    setParsing() {
+        this.Parsing.set("PROGRAM|IDENTIFICADOR|;|BLOCO|." ,"52,1");
+        this.Parsing.set("DCLROT|DCLCONST|DCLVAR|DCLPROC|CORPO" ,"53,2");
+        this.Parsing.set("DCLROT|DCLCONST|DCLVAR|DCLPROC|CORPO" ,"53,3");
+        this.Parsing.set("DCLROT|DCLCONST|DCLVAR|DCLPROC|CORPO" ,"53,4");
+        this.Parsing.set("DCLROT|DCLCONST|DCLVAR|DCLPROC|CORPO" ,"53,5");
+        this.Parsing.set("DCLROT|DCLCONST|DCLVAR|DCLPROC|CORPO" ,"53,6");
+        this.Parsing.set("LABEL|LID|;" ,"54,2");
+        this.Parsing.set("NULL" ,"54,3");
+        this.Parsing.set("NULL" ,"54,4");
+        this.Parsing.set("NULL" ,"54,5");
+        this.Parsing.set("NULL" ,"54,6");
+        this.Parsing.set("IDENTIFICADOR|REPIDENT" ,"55,25");
+        this.Parsing.set("NULL" ,"56,39");
+        this.Parsing.set(",|IDENTIFICADOR|REPIDENT" ,"56,46");
+        this.Parsing.set("NULL" ,"56,47");
+        this.Parsing.set("CONST|IDENTIFICADOR|=|INTEIRO|;|LDCONST" ,"57,3");
+        this.Parsing.set("NULL" ,"57,4");
+        this.Parsing.set("NULL" ,"57,5");
+        this.Parsing.set("NULL" ,"57,6");
+        this.Parsing.set("NULL" ,"58,4");
+        this.Parsing.set("NULL" ,"58,5");
+        this.Parsing.set("NULL" ,"58,6");
+        this.Parsing.set("IDENTIFICADOR|=|INTEIRO|;|LDCONST" ,"58,25");
+        this.Parsing.set("VAR|LID|:|TIPO|;|LDVAR" ,"59,4");
+        this.Parsing.set("NULL" ,"59,5");
+        this.Parsing.set("NULL" ,"59,6");
+        this.Parsing.set("NULL" ,"60,5");
+        this.Parsing.set("NULL" ,"60,6");
+        this.Parsing.set("LID|:|TIPO|;|LDVAR" ,"60,25");
+        this.Parsing.set("INTEGER" ,"61,8");
+        this.Parsing.set("ARRAY|[|INTEIRO|..|INTEIRO|]|OF|INTEGER" ,"61,9");
+        this.Parsing.set("PROCEDURE|IDENTIFICADOR|DEFPAR|;|BLOCO|;|DCLPROC" ,"62,5");
+        this.Parsing.set("NULL" ,"62,6");
+        this.Parsing.set("(|LID|:|INTEGER|)" ,"63,36");
+        this.Parsing.set("NULL" ,"63,39");
+        this.Parsing.set("BEGIN|COMANDO|REPCOMANDO|END" ,"64,6");
+        this.Parsing.set("NULL" ,"65,7");
+        this.Parsing.set(";|COMANDO|REPCOMANDO" ,"65,47");
+        this.Parsing.set("CORPO" ,"66,6");
+        this.Parsing.set("NULL" ,"66,7");
+        this.Parsing.set("CALL|IDENTIFICADOR|PARAMETROS" ,"66,11");
+        this.Parsing.set("GOTO|IDENTIFICADOR" ,"66,12");
+        this.Parsing.set("IF|EXPRESSAO|THEN|COMANDO|ELSEPARTE" ,"66,13");
+        this.Parsing.set("NULL" ,"66,15");
+        this.Parsing.set("WHILE|EXPRESSAO|DO|COMANDO" ,"66,16");
+        this.Parsing.set("REPEAT|COMANDO|UNTIL|EXPRESSAO" ,"66,18");
+        this.Parsing.set("NULL" ,"66,19");
+        this.Parsing.set("READLN|(|VARIAVEL|REPVARIAVEL|)" ,"66,20");
+        this.Parsing.set("WRITELN|(|ITEMSAIDA|REPITEM|)" ,"66,21");
+        this.Parsing.set("IDENTIFICADOR|RCOMID" ,"66,25");
+        this.Parsing.set("FOR|IDENTIFICADOR|:=|EXPRESSAO|TO|EXPRESSAO|DO|COMANDO" ,"66,27");
+        this.Parsing.set("CASE|EXPRESSAO|OF|CONDCASE|END" ,"66,29");
+        this.Parsing.set("NULL" ,"66,47");
+        this.Parsing.set("RVAR|:=|EXPRESSAO" ,"67,34");
+        this.Parsing.set("RVAR|:=|EXPRESSAO" ,"67,38");
+        this.Parsing.set(":|COMANDO" ,"67,39");
+        this.Parsing.set("[|EXPRESSAO|]" ,"68,34");
+        this.Parsing.set("NULL" ,"68,38");
+        this.Parsing.set("NULL" ,"69,7");
+        this.Parsing.set("NULL" ,"69,15");
+        this.Parsing.set("NULL" ,"69,19");
+        this.Parsing.set("(|EXPRESSAO|REPPAR|)" ,"69,36");
+        this.Parsing.set("NULL" ,"69,47");
+        this.Parsing.set("NULL" ,"70,37");
+        this.Parsing.set(",|EXPRESSAO|REPPAR" ,"70,46");
+        this.Parsing.set("NULL" ,"71,7");
+        this.Parsing.set("ELSE|COMANDO" ,"71,15");
+        this.Parsing.set("NULL" ,"71,19");
+        this.Parsing.set("NULL" ,"71,47");
+        this.Parsing.set("IDENTIFICADOR|VARIAVEL1" ,"72,25");
+        this.Parsing.set("NULL" ,"73,7");
+        this.Parsing.set("NULL" ,"73,10");
+        this.Parsing.set("NULL" ,"73,14");
+        this.Parsing.set("NULL" ,"73,15");
+        this.Parsing.set("NULL" ,"73,17");
+        this.Parsing.set("NULL" ,"73,19");
+        this.Parsing.set("NULL" ,"73,22");
+        this.Parsing.set("NULL" ,"73,23");
+        this.Parsing.set("NULL" ,"73,28");
+        this.Parsing.set("NULL" ,"73,30");
+        this.Parsing.set("NULL" ,"73,31");
+        this.Parsing.set("NULL" ,"73,32");
+        this.Parsing.set("NULL" ,"73,33");
+        this.Parsing.set("[|EXPRESSAO|]" ,"73,34");
+        this.Parsing.set("NULL" ,"73,35");
+        this.Parsing.set("NULL" ,"73,37");
+        this.Parsing.set("NULL" ,"73,40");
+        this.Parsing.set("NULL" ,"73,41");
+        this.Parsing.set("NULL" ,"73,42");
+        this.Parsing.set("NULL" ,"73,43");
+        this.Parsing.set("NULL" ,"73,44");
+        this.Parsing.set("NULL" ,"73,45");
+        this.Parsing.set("NULL" ,"73,46");
+        this.Parsing.set("NULL" ,"73,47");
+        this.Parsing.set("NULL" ,"74,37");
+        this.Parsing.set(",|VARIAVEL|REPVARIAVEL" ,"74,46");
+        this.Parsing.set("EXPRESSAO" ,"75,24");
+        this.Parsing.set("EXPRESSAO" ,"75,25");
+        this.Parsing.set("EXPRESSAO" ,"75,26");
+        this.Parsing.set("EXPRESSAO" ,"75,30");
+        this.Parsing.set("EXPRESSAO" ,"75,31");
+        this.Parsing.set("EXPRESSAO" ,"75,36");
+        this.Parsing.set("LITERAL" ,"75,48");
+        this.Parsing.set("NULL" ,"76,37");
+        this.Parsing.set(",|ITEMSAIDA|REPITEM" ,"76,46");
+        this.Parsing.set("EXPSIMP|REPEXPSIMP" ,"77,24");
+        this.Parsing.set("EXPSIMP|REPEXPSIMP" ,"77,25");
+        this.Parsing.set("EXPSIMP|REPEXPSIMP" ,"77,26");
+        this.Parsing.set("EXPSIMP|REPEXPSIMP" ,"77,30");
+        this.Parsing.set("EXPSIMP|REPEXPSIMP" ,"77,31");
+        this.Parsing.set("EXPSIMP|REPEXPSIMP" ,"77,36");
+        this.Parsing.set("NULL" ,"78,7");
+        this.Parsing.set("NULL" ,"78,10");
+        this.Parsing.set("NULL" ,"78,14");
+        this.Parsing.set("NULL" ,"78,15");
+        this.Parsing.set("NULL" ,"78,17");
+        this.Parsing.set("NULL" ,"78,19");
+        this.Parsing.set("NULL" ,"78,28");
+        this.Parsing.set("NULL" ,"78,35");
+        this.Parsing.set("NULL" ,"78,37");
+        this.Parsing.set("=|EXPSIMP" ,"78,40");
+        this.Parsing.set(">|EXPSIMP" ,"78,41");
+        this.Parsing.set(">=|EXPSIMP" ,"78,42");
+        this.Parsing.set("<|EXPSIMP" ,"78,43");
+        this.Parsing.set("<=|EXPSIMP" ,"78,44");
+        this.Parsing.set("<>|EXPSIMP" ,"78,45");
+        this.Parsing.set("NULL" ,"78,46");
+        this.Parsing.set("NULL" ,"78,47");
+        this.Parsing.set("TERMO|REPEXP" ,"79,24");
+        this.Parsing.set("TERMO|REPEXP" ,"79,25");
+        this.Parsing.set("TERMO|REPEXP" ,"79,26");
+        this.Parsing.set("+|TERMO|REPEXP" ,"79,30");
+        this.Parsing.set("-|TERMO|REPEXP" ,"79,31");
+        this.Parsing.set("TERMO|REPEXP" ,"79,36");
+        this.Parsing.set("NULL" ,"80,7");
+        this.Parsing.set("NULL" ,"80,10");
+        this.Parsing.set("NULL" ,"80,14");
+        this.Parsing.set("NULL" ,"80,15");
+        this.Parsing.set("NULL" ,"80,17");
+        this.Parsing.set("NULL" ,"80,19");
+        this.Parsing.set("OR|TERMO|REPEXP" ,"80,22");
+        this.Parsing.set("NULL" ,"80,28");
+        this.Parsing.set("+|TERMO|REPEXP" ,"80,30");
+        this.Parsing.set("-|TERMO|REPEXP" ,"80,31");
+        this.Parsing.set("NULL" ,"80,35");
+        this.Parsing.set("NULL" ,"80,37");
+        this.Parsing.set("NULL" ,"80,40");
+        this.Parsing.set("NULL" ,"80,41");
+        this.Parsing.set("NULL" ,"80,42");
+        this.Parsing.set("NULL" ,"80,43");
+        this.Parsing.set("NULL" ,"80,44");
+        this.Parsing.set("NULL" ,"80,45");
+        this.Parsing.set("NULL" ,"80,46");
+        this.Parsing.set("NULL" ,"80,47");
+        this.Parsing.set("FATOR|REPTERMO" ,"81,24");
+        this.Parsing.set("FATOR|REPTERMO" ,"81,25");
+        this.Parsing.set("FATOR|REPTERMO" ,"81,26");
+        this.Parsing.set("FATOR|REPTERMO" ,"81,36");
+        this.Parsing.set("NULL" ,"82,7");
+        this.Parsing.set("NULL" ,"82,10");
+        this.Parsing.set("NULL" ,"82,14");
+        this.Parsing.set("NULL" ,"82,15");
+        this.Parsing.set("NULL" ,"82,17");
+        this.Parsing.set("NULL" ,"82,19");
+        this.Parsing.set("NULL" ,"82,22");
+        this.Parsing.set("AND|FATOR|REPTERMO" ,"82,23");
+        this.Parsing.set("NULL" ,"82,28");
+        this.Parsing.set("NULL" ,"82,30");
+        this.Parsing.set("NULL" ,"82,31");
+        this.Parsing.set("*|FATOR|REPTERMO" ,"82,32");
+        this.Parsing.set("/|FATOR|REPTERMO" ,"82,33");
+        this.Parsing.set("NULL" ,"82,35");
+        this.Parsing.set("NULL" ,"82,37");
+        this.Parsing.set("NULL" ,"82,40");
+        this.Parsing.set("NULL" ,"82,41");
+        this.Parsing.set("NULL" ,"82,42");
+        this.Parsing.set("NULL" ,"82,43");
+        this.Parsing.set("NULL" ,"82,44");
+        this.Parsing.set("NULL" ,"82,45");
+        this.Parsing.set("NULL" ,"82,46");
+        this.Parsing.set("NULL" ,"82,47");
+        this.Parsing.set("NOT|FATOR" ,"83,24");
+        this.Parsing.set("VARIAVEL" ,"83,25");
+        this.Parsing.set("INTEIRO" ,"83,26");
+        this.Parsing.set("(|EXPRESSAO|)" ,"83,36");
+        this.Parsing.set("INTEIRO|RPINTEIRO|:|COMANDO|CONTCASE" ,"84,26");
+        this.Parsing.set("NULL" ,"85,7");
+        this.Parsing.set(";|CONDCASE" ,"85,47");
+        this.Parsing.set("NULL" ,"86,39");
+        this.Parsing.set(",|INTEIRO|RPINTEIRO" ,"86,46");
+    }
+
+    getIdentifierorInteger(token: string) {
+        const charList: string[] = token.split('');
+        let identifier: boolean = true;
+        
+        charList.forEach(value => {
+            // verify
+        });
+
+        return identifier ? this.Gramatics.get("IDENTIFICADOR") : this.Gramatics.get("INTEIRO");
     }
 
 }
