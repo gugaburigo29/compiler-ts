@@ -10,6 +10,7 @@ class Gramatic {
         negative: -32767,
         positive: 32767
     };
+    ParsingDivider = "|";
 
     CommentCharacterStart = "(*";
     CommentCharacterEnd = "*)";
@@ -86,15 +87,16 @@ class Gramatic {
 
         if (!code) {
             if (isNaN(parseInt(token))) {
-                code = this.Gramatics.get('IDENTIFICADOR') || 25;
+                code = this.Gramatics.get('IDENTIFICADOR')!;
             } else {
-                code = this.Gramatics.get('INTEIRO') || 26;
+                code = this.Gramatics.get('INTEIRO')!;
             }
         }
 
         return code;
     }
 
+    // inverse 
     setParsing() {
         this.Parsing.set("PROGRAM|IDENTIFICADOR|;|BLOCO|." ,"52,1");
         this.Parsing.set("DCLROT|DCLCONST|DCLVAR|DCLPROC|CORPO" ,"53,2");
@@ -288,17 +290,19 @@ class Gramatic {
         this.Parsing.set(",|INTEIRO|RPINTEIRO" ,"86,46");
     }
 
-    getIdentifierorInteger(token: string) {
-        const charList: string[] = token.split('');
-        let identifier: boolean = true;
-        
-        charList.forEach(value => {
-            // verify
-        });
-
-        return identifier ? this.Gramatics.get("IDENTIFICADOR") : this.Gramatics.get("INTEIRO");
+    getParsing(parsing: string) {
+        return this.Parsing.get(parsing);
     }
 
+    gerenateCrossingTabParsingToken(parsing: string) {
+        if (!parsing) {
+            const tokens: string[] = parsing.split(this.ParsingDivider);
+            const data = tokens.map((value) => (this.getTokenIdentificationCode(value)));
+
+            return data;
+        }
+        return null;
+    }
 }
 
 export default Gramatic;

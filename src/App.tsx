@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {createUser, selectUser} from "./store/user/actions";
-import {Layout} from "antd";
+import {Layout, message} from "antd";
 import {FooterComponent, HeaderComponent, SiderTable, TextAreaComponent} from './styles/styles';
 import Editor from "./components/Editor/";
 import {FolderOpenOutlined, PlaySquareOutlined, SaveOutlined} from "@ant-design/icons";
@@ -10,21 +10,10 @@ import {selectCode, setTextCode} from "./store/editor/actions";
 import Gramatic from './gramatic/Gramatic';
 import TableComponent from './components/Table';
 import {TokenInterface} from "./store/table/actions";
+import Syntatic from './gramatic/Syntatic';
+import { debug } from 'console';
 
 const {Sider, Content} = Layout;
-
-const dataTableTop = [
-    {
-        key: '1',
-        Codigo: 52,
-        Palavra: 'PROGRAMA'
-    },
-    {
-        key: '2',
-        Codigo: 53,
-        Palavra: 'END'
-    }
-];
 
 interface GramaticProps {
     lineNumber: number;
@@ -38,6 +27,7 @@ function App() {
     const code = useSelector(selectCode);
     const inputFileRef = useRef<HTMLInputElement>(null); // Take the ref. of component
     const gramaticClass = new Gramatic();
+    const syntaticClass = new Syntatic();
 
     const [tokens, setTokens] = useState<TokenInterface[]>([]);
     const [consoleMessages, setConsoleMessages] = useState<string[]>([]);
@@ -109,7 +99,6 @@ function App() {
                     word = '';
                 }
                 else if (gramaticClass.SpecialTokens.includes(letter)) {
-                    debugger
                     if (gramaticClass.DuplicateTokens.includes(letter)) {
                         if (gramaticClass.SpecialTokens.includes(previousLetter + letter)) {
                             words.push(previousLetter + letter);
@@ -208,8 +197,14 @@ function App() {
                 </div>
                 <div onClick={() => {
                     try {
+                        setConsoleMessages(messages => [...messages, "Initiating application..."]);
                         setTokens([]);
+                        
                         handleCompileFile();
+                        setConsoleMessages(messages => [...messages, "Initiating lexical analysis..."]);
+
+                        syntaticClass.analyse();
+                        setConsoleMessages(messages => [...messages, "Initiating syntatic analysis..."]);
                     } catch (e) {
                         setConsoleMessages(messages => [...messages, e.message]);
                         console.log(e)
@@ -235,7 +230,7 @@ function App() {
             </Layout>
             <FooterComponent>
                 <TextAreaComponent>
-                    {consoleMessages.map(val => <p>{val}</p>)}
+                    {consoleMessages.map((val, index) => <p key={index}>{val}</p>)}
                 </TextAreaComponent>
             </FooterComponent>
         </Layout>
