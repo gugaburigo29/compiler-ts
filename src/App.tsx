@@ -48,7 +48,7 @@ function App() {
         }
 
         dispatch(setTextCode(textFile));
-    }
+    };
 
     async function readFile(file: File): Promise<string> {
         return new Promise((resolve, reject) => {
@@ -59,7 +59,7 @@ function App() {
 
             fileReader.readAsText(file);
         });
-    }
+    };
 
     function download(code: string) {
         const element = document.createElement('a');
@@ -72,7 +72,23 @@ function App() {
         element.click();
 
         document.body.removeChild(element);
-    }
+    };
+
+    function handleCompileClick(){
+        setConsoleMessagesState("Initiating application...");
+        setTokens([]);
+
+        setConsoleMessagesState("Initiating lexical analysis...");
+        const tokens = handleCompileFile();
+        setTokens(tokens);
+        debugger
+        syntaticClass.analyse(tokens);
+        setConsoleMessages(messages => [...messages, "Initiating syntatic analysis..."]);
+    };
+
+    function setConsoleMessagesState(message: string) {
+        setConsoleMessages(messages => [...messages, message]);
+    };
 
     function handleCompileFile() {
         let codeToAnalyze: Array<string> = code.split('\n');
@@ -172,8 +188,8 @@ function App() {
             word: value.value
         }));
 
-        setTokens(tokens);
-    }
+        return tokens;
+    };
 
     return (
         <Layout style={{height: '100%'}}>
@@ -197,14 +213,7 @@ function App() {
                 </div>
                 <div onClick={() => {
                     try {
-                        setConsoleMessages(messages => [...messages, "Initiating application..."]);
-                        setTokens([]);
-                        
-                        handleCompileFile();
-                        setConsoleMessages(messages => [...messages, "Initiating lexical analysis..."]);
-
-                        syntaticClass.analyse();
-                        setConsoleMessages(messages => [...messages, "Initiating syntatic analysis..."]);
+                        handleCompileClick();
                     } catch (e) {
                         setConsoleMessages(messages => [...messages, e.message]);
                         console.log(e)
