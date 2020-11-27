@@ -21,13 +21,14 @@ interface GramaticProps {
     identificationCode: number;
 }
 
+const gramaticClass = new Gramatic();
+const syntaticClass = new Syntatic();
+
 function App() {
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
     const code = useSelector(selectCode);
     const inputFileRef = useRef<HTMLInputElement>(null); // Take the ref. of component
-    const gramaticClass = new Gramatic();
-    const syntaticClass = new Syntatic();
 
     const [tokens, setTokens] = useState<TokenInterface[]>([]);
     const [consoleMessages, setConsoleMessages] = useState<string[]>([]);
@@ -239,7 +240,7 @@ function App() {
             </Layout>
             <FooterComponent>
                 <TextAreaComponent>
-                    {consoleMessages.map((val, index) => <p key={index}>{val}</p>)}
+                    {consoleMessages.map((val, index) => <div key={index}>{val}</div>)}
                 </TextAreaComponent>
             </FooterComponent>
         </Layout>

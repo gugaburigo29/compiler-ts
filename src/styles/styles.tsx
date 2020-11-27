@@ -20,8 +20,12 @@ export const FooterComponent = styled(Footer)`
     padding: 5px 5px;
 `;
 
-export const TextAreaComponent = styled.textarea `
+export const TextAreaComponent = styled.div `
     width: 100%;
     height: 100%;
     resize: none;
+    padding: 15px;
+    border: 1px solid grey;
+    max-height: 190px;
+    overflow-y: auto;
 `;
