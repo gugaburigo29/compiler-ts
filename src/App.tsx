@@ -12,6 +12,7 @@ import TableComponent from './components/Table';
 import {TokenInterface} from "./store/table/actions";
 import Syntatic from './gramatic/Syntatic';
 import { debug } from 'console';
+import Console from "./components/Console";
 
 const {Sider, Content} = Layout;
 
@@ -31,7 +32,20 @@ function App() {
     const inputFileRef = useRef<HTMLInputElement>(null); // Take the ref. of component
 
     const [tokens, setTokens] = useState<TokenInterface[]>([]);
-    const [consoleMessages, setConsoleMessages] = useState<string[]>([]);
+    const [consoleMessages, setConsoleMessages] = useState<string[]>([
+        'asd',
+        'asd',
+        'asd',
+        'asd',
+        'asd',
+        'asd',
+        'asd',
+        'asd',
+        'asd',
+        'asd',
+        'asd',
+        'asd',
+    ]);
 
     useEffect(() => {
         dispatch(createUser());
@@ -239,9 +253,7 @@ function App() {
                 </Layout>
             </Layout>
             <FooterComponent>
-                <TextAreaComponent>
-                    {consoleMessages.map((val, index) => <div key={index}>{val}</div>)}
-                </TextAreaComponent>
+                <Console messages={consoleMessages} />
             </FooterComponent>
         </Layout>
     );
