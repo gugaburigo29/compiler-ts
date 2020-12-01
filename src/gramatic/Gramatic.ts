@@ -76,6 +76,44 @@ class Gramatic {
         this.Gramatics.set(".", 49);
         this.Gramatics.set("..", 50);
         this.Gramatics.set("$", 51);
+
+        // Code greater than 51, NON-TERMINAL
+        this.Gramatics.set("PROGRAMA", 52)
+        this.Gramatics.set("BLOCO", 53)
+        this.Gramatics.set("DCLROT", 54)
+        this.Gramatics.set("LID", 55)
+        this.Gramatics.set("REPIDENT", 56)
+        this.Gramatics.set("DCLCONST", 57)
+        this.Gramatics.set("LDCONST", 58)
+        this.Gramatics.set("DCLVAR", 59)
+        this.Gramatics.set("LDVAR", 60)
+        this.Gramatics.set("TIPO", 61)
+        this.Gramatics.set("DCLPROC", 62)
+        this.Gramatics.set("DEFPAR", 63)
+        this.Gramatics.set("CORPO", 64)
+        this.Gramatics.set("REPCOMANDO", 65)
+        this.Gramatics.set("COMANDO", 66)
+        this.Gramatics.set("RCOMID", 67)
+        this.Gramatics.set("RVAR", 68)
+        this.Gramatics.set("PARAMETROS", 69)
+        this.Gramatics.set("REPPAR", 70)
+        this.Gramatics.set("ELSEPARTE", 71)
+        this.Gramatics.set("VARIAVEL", 72)
+        this.Gramatics.set("VARIAVEL1", 73)
+        this.Gramatics.set("REPVARIAVEL", 74)
+        this.Gramatics.set("ITEMSAIDA", 75)
+        this.Gramatics.set("REPITEM", 76)
+        this.Gramatics.set("EXPRESSAO", 77)
+        this.Gramatics.set("REPEXPSIMP", 78)
+        this.Gramatics.set("EXPSIMP", 79)
+        this.Gramatics.set("REPEXP", 80)
+        this.Gramatics.set("TERMO", 81)
+        this.Gramatics.set("REPTERMO", 82)
+        this.Gramatics.set("FATOR", 83)
+        this.Gramatics.set("CONDCASE", 84)
+        this.Gramatics.set("CONTCASE", 85)
+        this.Gramatics.set("RPINTEIRO", 86)
+        this.Gramatics.set("SEMEFEITO", 87)
     }
 
     getGramatic() {
