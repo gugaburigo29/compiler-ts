@@ -14,7 +14,7 @@ class Syntatic {
 
     initializeStacks(tokens: TokenInterface[]) {
         this.stackX.push(52); // Add 52(PROGRAM) on the top of stack
-        this.stackA = tokens;
+        this.stackA = [...tokens];
         this.stackA.reverse();
     }
 
