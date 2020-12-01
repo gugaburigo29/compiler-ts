@@ -32,20 +32,7 @@ function App() {
     const inputFileRef = useRef<HTMLInputElement>(null); // Take the ref. of component
 
     const [tokens, setTokens] = useState<TokenInterface[]>([]);
-    const [consoleMessages, setConsoleMessages] = useState<string[]>([
-        'asd',
-        'asd',
-        'asd',
-        'asd',
-        'asd',
-        'asd',
-        'asd',
-        'asd',
-        'asd',
-        'asd',
-        'asd',
-        'asd',
-    ]);
+    const [consoleMessages, setConsoleMessages] = useState<string[]>([]);
 
     useEffect(() => {
         dispatch(createUser());
