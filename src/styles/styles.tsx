@@ -12,7 +12,6 @@ export const HeaderComponent = styled(Header)`
 export const SiderTable = styled.div `
     height: 50%;
     max-height: 50%;
-    color: 
 `;
 
 export const FooterComponent = styled(Footer)`

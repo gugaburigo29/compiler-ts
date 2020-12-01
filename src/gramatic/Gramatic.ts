@@ -110,7 +110,7 @@ class Gramatic {
         this.Parsing.set("54,6", "NULL");
         this.Parsing.set("55,25", "IDENTIFICADOR|REPIDENT");
         this.Parsing.set("56,39", "NULL");
-        this.Parsing.set("56,46", ",|IDENTIFICADOR|REPIDENT");	
+        this.Parsing.set("56,46", ",|IDENTIFICADOR|REPIDENT");
         this.Parsing.set("56,47", "NULL");
         this.Parsing.set("57,3", "CONST|IDENTIFICADOR|=|INTEIRO|;|LDCONST");
         this.Parsing.set("57,4", "NULL");
@@ -294,7 +294,7 @@ class Gramatic {
     }
 
     gerenateCrossingTabParsingToken(parsing: string) {
-        if (!parsing) {
+        if (parsing) {
             const tokens: string[] = parsing.split(this.ParsingDivider);
             const data = tokens.map((value) => (this.getTokenIdentificationCode(value)));
 

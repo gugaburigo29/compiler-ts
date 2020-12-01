@@ -15,6 +15,7 @@ class Syntatic {
     initializeStacks(tokens: TokenInterface[]) {
         this.stackX.push(52); // Add 52(PROGRAM) on the top of stack
         this.stackA = tokens;
+        this.stackA.reverse();
     }
 
     analyse(tokens: TokenInterface[]) {
@@ -42,7 +43,7 @@ class Syntatic {
                 if(join == undefined) {
                     me.stackX.pop();
                 } else {
-                    if(!join) {
+                    if(join) {
                         me.stackX.pop();
 
                         const crossingData = this.Gramatic.gerenateCrossingTabParsingToken(join);
@@ -60,7 +61,7 @@ class Syntatic {
         let length = this.stackX.length;
         return length ? length - 1 : 0;
     }
-    
+
     getLengthStackA() {
         let length = this.stackA.length;
         return length ? length - 1 : 0;
