@@ -4,7 +4,7 @@ class Gramatic {
 
     LineDelimiters = [";"];
     WordDelimiters = ["", ","];
-    SpecialTokens = ["*", "/", "[", "]", "(", ")", ":=", ":", "=", ">", ">=", "<", "<=", "< >", ",", ";", ".", "$", ".."];
+    SpecialTokens = ["*", "/", "[", "]", "(", ")", ":=", ":", "=", ">", ">=", "<", "<=", "<>", ",", ";", ".", "$", ".."];
     DuplicateTokens = [":", ">", "<", "."];
     IntegerMaxValue = {
         negative: -32767,
@@ -69,7 +69,7 @@ class Gramatic {
         this.Gramatics.set(">=", 42);
         this.Gramatics.set("<", 43);
         this.Gramatics.set("<=", 44);
-        this.Gramatics.set("< >", 45);
+        this.Gramatics.set("<>", 45);
         this.Gramatics.set(",", 46);
         this.Gramatics.set(";", 47);
         this.Gramatics.set("LITERAL", 48);
