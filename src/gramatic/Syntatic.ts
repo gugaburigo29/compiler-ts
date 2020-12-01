@@ -19,6 +19,7 @@ class Syntatic {
     }
 
     analyse(tokens: TokenInterface[]) {
+        debugger;
         var me = this;
         this.initializeStacks(tokens);
 
@@ -48,7 +49,7 @@ class Syntatic {
 
                         const crossingData = this.Gramatic.gerenateCrossingTabParsingToken(join);
 
-                        crossingData?.forEach((value) => {
+                        crossingData?.reverse().forEach((value) => {
                             this.stackX.push(value);
                         });
                     }

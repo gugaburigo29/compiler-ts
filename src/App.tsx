@@ -83,7 +83,6 @@ function App() {
         setConsoleMessagesState("Initiating lexical analysis...");
         const tokens = handleCompileFile();
         setTokens(tokens);
-        debugger
         syntaticClass.analyse(tokens);
         setConsoleMessages(messages => [...messages, "Initiating syntatic analysis..."]);
     };
