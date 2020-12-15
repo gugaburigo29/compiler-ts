@@ -85,6 +85,9 @@ function App() {
         setTokens(tokens);
         syntaticClass.analyse(tokens);
         setConsoleMessages(messages => [...messages, "Initiating syntatic analysis..."]);
+
+        
+        setConsoleMessagesState("Initiating semantic analysis...");
     };
 
     function setConsoleMessagesState(message: string) {
@@ -103,26 +106,38 @@ function App() {
             let previousLetter: string = '';
             let lengthLineSplited: number = lineSplited.length;
 
-            lineSplited.forEach((letter: string, index: number) => {
-                letter = letter.trim();
+            for (let i = 0; i < lineSplited.length; i++) {
+                var letter = lineSplited[i].trim();
 
-                if (isComment) {
-                    if (((previousLetter + letter).includes(gramaticClass.CommentCharacterEnd))) {
-                        isComment = false;
-                    }
-                } else if (((previousLetter + letter).includes(gramaticClass.CommentCharacterStart))) {
+                // Comment
+                if(letter === "(" && i < line.length + 1 && line[i + 1] === "*" ) {
                     isComment = true;
-
-                    word = '';
-                }
-                else if (gramaticClass.SpecialTokens.includes(letter)) {
+                } else if (letter === ")" && 1 < line.length && line[i - 1] === "*" ) {
+                    isComment = false;
+                } else if(isComment) {
+                    continue;
+                }else if (gramaticClass.SpecialTokens.includes(letter)) {
                     if (gramaticClass.DuplicateTokens.includes(letter)) {
-                        if (gramaticClass.SpecialTokens.includes(previousLetter + letter)) {
-                            words.push(previousLetter + letter);
-                            word = "";
-                        } else if (word.length) {
-                            words.push(word);
-                            word = letter;
+                        let currentWord = "";
+
+                        if(gramaticClass.SpecialTokens.includes(letter + lineSplited[i + 1]) && i + 1 < lineSplited.length && lineSplited[i + 1].trim()) {
+                            currentWord = letter + lineSplited[i + 1];
+                        } else if(gramaticClass.SpecialTokens.includes(previousLetter + letter) && 1 < lineSplited.length && previousLetter.trim()) {
+                            currentWord = previousLetter + letter;
+                        }
+                        if (currentWord.length) {
+                            if (word.length) {
+                                words.push(word);
+                                word = "";
+                            }
+                            words.push(currentWord);
+                            i++;
+                        } else {
+                            if (word.length) {
+                                words.push(word);
+                                word = "";
+                            }
+                            words.push(letter);
                         }
                     } else {
                         if (word.length) {
@@ -144,7 +159,7 @@ function App() {
                         words.push(letter);
                     }
                     // Check if is the last character
-                } else if (lengthLineSplited === (index + 1)) {
+                } else if (lengthLineSplited === (i + 1)) {
                     if (word.length) {
                         words.push(word + letter);
                         word = '';
@@ -154,8 +169,8 @@ function App() {
                 }
 
                 previousLetter = letter;
-            });
-
+            };
+            
             words.forEach((token: string) => {
                 const gramatic = {
                     lineNumber: lineNumber + 1,

@@ -1,3 +1,4 @@
+import { debug } from "console";
 import { TokenInterface } from "../store/table/actions";
 import Gramatic from "./Gramatic";
 
@@ -19,7 +20,6 @@ class Syntatic {
     }
 
     analyse(tokens: TokenInterface[]) {
-        debugger;
         var me = this;
         this.initializeStacks(tokens);
 
@@ -28,32 +28,32 @@ class Syntatic {
             let topA: TokenInterface = this.stackA[this.getLengthStackA()];
 
             let code: number = topA.code;
-            console.log("Inteiro ou id: [" + topX + "," + code + "]");
+            //console.log("Inteiro ou id: [" + topX + "," + code + "]");
 
             if(topX && topX < 52) {
                 if (topX === code) {
-                    console.log("Equals");
                     me.stackA.pop();
                     me.stackX.pop();
                 } else {
+                    debugger
                     throw new Error("Syntatic error!!");
                 }
             } else {
                 const join = this.Gramatic.getParsing(topX + "," + code);
+                me.stackX.pop();
+                // if(join == undefined) {
+                //     me.stackX.pop();
+                // } else {
+                    // if(join) {
+                    //     me.stackX.pop();
 
-                if(join == undefined) {
-                    me.stackX.pop();
-                } else {
-                    if(join) {
-                        me.stackX.pop();
-
-                        const crossingData = this.Gramatic.gerenateCrossingTabParsingToken(join);
-
+                        const crossingData = this.Gramatic.gerenateCrossingTabParsingToken(join!);
+                        
                         crossingData?.reverse().forEach((value) => {
-                            this.stackX.push(value);
+                            this.stackX.push(value as number);
                         });
-                    }
-                }
+                    // }
+                //}
             }
         }
     }

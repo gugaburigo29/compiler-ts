@@ -123,7 +123,7 @@ class Gramatic {
     getTokenIdentificationCode(token: string): number {
         let code = this.Gramatics.get(token.toUpperCase()) || 0;
 
-        if (!code) {
+        if (!code && token !== "NULL") {
             if (isNaN(parseInt(token))) {
                 code = this.Gramatics.get('IDENTIFICADOR')!;
             } else {
@@ -334,7 +334,9 @@ class Gramatic {
     gerenateCrossingTabParsingToken(parsing: string) {
         if (parsing) {
             const tokens: string[] = parsing.split(this.ParsingDivider);
-            const data = tokens.map((value) => (this.getTokenIdentificationCode(value)));
+            const data = tokens.map((value) => 
+                value && this.getTokenIdentificationCode(value)
+            ).filter(value => !!value);
 
             return data;
         }
