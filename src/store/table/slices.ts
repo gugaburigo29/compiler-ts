@@ -14,6 +14,12 @@ export const tableSlice = createSlice({
     name: 'table',
     initialState,
     reducers: {
+        setLine: (state, action: PayloadAction<number>) => {
+            return {
+                ...state,
+                line: action.payload
+            }
+        },
         setCode: (state, action: PayloadAction<number>) => {
             return {
                 ...state,

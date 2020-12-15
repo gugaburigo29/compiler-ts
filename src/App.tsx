@@ -7,12 +7,13 @@ import Editor from "./components/Editor/";
 import {FolderOpenOutlined, PlaySquareOutlined, SaveOutlined} from "@ant-design/icons";
 import Icon from "./components/Icon";
 import {selectCode, setTextCode} from "./store/editor/actions";
-import Gramatic from './gramatic/Gramatic';
 import TableComponent from './components/Table';
 import {TokenInterface} from "./store/table/actions";
-import Syntatic from './gramatic/Syntatic';
-import { debug } from 'console';
 import Console from "./components/Console";
+
+import Gramatic from './gramatic/Gramatic';
+import Syntatic from './gramatic/Syntatic';
+import Semantic from './gramatic/Semantic';
 
 const {Sider, Content} = Layout;
 
@@ -83,11 +84,15 @@ function App() {
         setConsoleMessagesState("Initiating lexical analysis...");
         const tokens = handleCompileFile();
         setTokens(tokens);
+        
         syntaticClass.analyse(tokens);
         setConsoleMessages(messages => [...messages, "Initiating syntatic analysis..."]);
 
         
         setConsoleMessagesState("Initiating semantic analysis...");
+        const semanticClass = new Semantic(tokens);
+
+        setConsoleMessages(messages => [...messages, "Compiled!!"]);
     };
 
     function setConsoleMessagesState(message: string) {
@@ -200,6 +205,7 @@ function App() {
         });
 
         const tokens: TokenInterface[] = classifiedGramatic.map(value => ({
+            line: value.lineNumber,
             code: value.identificationCode,
             word: value.value
         }));

@@ -6,11 +6,15 @@ class Syntatic {
     stackX: Array<number>;
     stackA: Array<TokenInterface>;
     Gramatic: Gramatic;
+    join: string;
+    lastJoin: string;
 
     constructor() {
         this.stackX = [];
         this.stackA = [];
         this.Gramatic = new Gramatic();
+        this.join = "";
+        this.lastJoin = "";
     }
 
     initializeStacks(tokens: TokenInterface[]) {
@@ -28,7 +32,6 @@ class Syntatic {
             let topA: TokenInterface = this.stackA[this.getLengthStackA()];
 
             let code: number = topA.code;
-            //console.log("Inteiro ou id: [" + topX + "," + code + "]");
 
             if(topX && topX < 52) {
                 if (topX === code) {
@@ -36,24 +39,18 @@ class Syntatic {
                     me.stackX.pop();
                 } else {
                     debugger
-                    throw new Error("Syntatic error!!");
+                    throw new Error(`Syntatic error!! It was expected: ${this.setParsingError()} but we got '${topA.word}' on line ${topA.line} .`);
                 }
             } else {
-                const join = this.Gramatic.getParsing(topX + "," + code);
+                this.join = this.Gramatic.getParsing(topX + "," + code) || "";
+                this.lastJoin = this.join || this.lastJoin;
                 me.stackX.pop();
-                // if(join == undefined) {
-                //     me.stackX.pop();
-                // } else {
-                    // if(join) {
-                    //     me.stackX.pop();
-
-                        const crossingData = this.Gramatic.gerenateCrossingTabParsingToken(join!);
-                        
-                        crossingData?.reverse().forEach((value) => {
-                            this.stackX.push(value as number);
-                        });
-                    // }
-                //}
+                
+                const crossingData = this.Gramatic.gerenateCrossingTabParsingToken(this.join);
+                
+                crossingData?.reverse().forEach((value) => {
+                    this.stackX.push(value as number);
+                });
             }
         }
     }
@@ -66,6 +63,17 @@ class Syntatic {
     getLengthStackA() {
         let length = this.stackA.length;
         return length ? length - 1 : 0;
+    }
+    
+    setParsingError(){
+        const parsings = this.lastJoin.split(this.Gramatic.ParsingDivider);
+        let message = "";
+        parsings.map((value, index) => {
+            if(index > 0) message += ' or '
+            message += `'${value}'`
+        });
+
+        return message;
     }
 }
 
