@@ -3,13 +3,25 @@ import {AppThunk, RootState} from "../index";
 
 const {setLine, setCode, setWord} = tableSlice.actions;
 
-export interface TokenInterface {
+export interface IToken {
     line: number;
     code: number;
     word: string;
 }
 
-export const setText = (token: TokenInterface): AppThunk => async dispatch => {
+export interface IVariable {
+    pos: number;
+    category: string;
+    name: string;
+    tipo: VariableType;
+}
+
+export enum VariableType {
+    INTEGER,
+    ARRAY
+}
+
+export const setText = (token: IToken): AppThunk => async dispatch => {
     dispatch(setLine(token.line));
     dispatch(setCode(token.code));
     dispatch(setWord(token.word));

@@ -1,7 +1,7 @@
 import React from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {Layout, Table} from "antd";
-import {selectTokenCode, selectTokenWord, TokenInterface} from "../../store/table/actions";
+import {selectTokenCode, selectTokenWord, IToken} from "../../store/table/actions";
 
 const columnsTableTop = [
     {
@@ -14,7 +14,7 @@ const columnsTableTop = [
     }
 ];
 
-function TableComponent({tokens}: {tokens: TokenInterface[]}){
+function TableComponent({tokens}: {tokens: IToken[]}){
     return (
         <Table
             columns={columnsTableTop}

@@ -8,7 +8,7 @@ import {FolderOpenOutlined, PlaySquareOutlined, SaveOutlined} from "@ant-design/
 import Icon from "./components/Icon";
 import {selectCode, setTextCode} from "./store/editor/actions";
 import TableComponent from './components/Table';
-import {TokenInterface} from "./store/table/actions";
+import {IToken} from "./store/table/actions";
 import Console from "./components/Console";
 
 import Gramatic from './gramatic/Gramatic';
@@ -32,7 +32,7 @@ function App() {
     const code = useSelector(selectCode);
     const inputFileRef = useRef<HTMLInputElement>(null); // Take the ref. of component
 
-    const [tokens, setTokens] = useState<TokenInterface[]>([]);
+    const [tokens, setTokens] = useState<IToken[]>([]);
     const [consoleMessages, setConsoleMessages] = useState<string[]>([]);
 
     useEffect(() => {
@@ -84,13 +84,14 @@ function App() {
         setConsoleMessagesState("Initiating lexical analysis...");
         const tokens = handleCompileFile();
         setTokens(tokens);
-        
+
         syntaticClass.analyse(tokens);
         setConsoleMessages(messages => [...messages, "Initiating syntatic analysis..."]);
 
-        
+
         setConsoleMessagesState("Initiating semantic analysis...");
         const semanticClass = new Semantic(tokens);
+        semanticClass.validate();
 
         setConsoleMessages(messages => [...messages, "Compiled!!"]);
     };
@@ -175,7 +176,7 @@ function App() {
 
                 previousLetter = letter;
             };
-            
+
             words.forEach((token: string) => {
                 const gramatic = {
                     lineNumber: lineNumber + 1,
@@ -204,7 +205,7 @@ function App() {
             });
         });
 
-        const tokens: TokenInterface[] = classifiedGramatic.map(value => ({
+        const tokens: IToken[] = classifiedGramatic.map(value => ({
             line: value.lineNumber,
             code: value.identificationCode,
             word: value.value
