@@ -13,12 +13,15 @@ export interface IVariable {
     pos: number;
     category: string;
     name: string;
-    tipo: VariableType;
+    tipo?: VariableType;
 }
 
 export enum VariableType {
-    INTEGER,
-    ARRAY
+    INTEGER = 'INTEGER',
+    ARRAY = 'ARRAY',
+    LITERAL = 'LITERAL',
+    PROCEDURE = 'PROCEDURE',
+    LABEL = 'LABEL',
 }
 
 export const setText = (token: IToken): AppThunk => async dispatch => {
