@@ -113,7 +113,7 @@ function App() {
             let lengthLineSplited: number = lineSplited.length;
 
             for (let i = 0; i < lineSplited.length; i++) {
-                var letter = lineSplited[i].trim();
+                var letter = lineSplited[i].trim().toUpperCase();
 
                 // Comment
                 if(letter === "(" && i < line.length + 1 && line[i + 1] === "*" ) {

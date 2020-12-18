@@ -83,6 +83,7 @@ class Semantic {
                                 procedureVars = this.parameterFunction[procedure];
                                 isFirst = true;
                             } else {
+                                debugger
                                 if (counter === procedureVars.length && counter !== 0) {
                                     throw new Error(`Semantic: Line ${token.line} It was expected ${counter} arguments, but received more.`);
                                 }
@@ -186,7 +187,6 @@ class Semantic {
     }
 
     private deleteVariable(position: number) {
-        debugger
         const parameters = this.variables.filter(value => {
             const isSamePosition = value.pos === position;
             const isSameCategory = value.category === "PARAMETER";
