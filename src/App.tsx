@@ -2,14 +2,14 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {createUser, selectUser} from "./store/user/actions";
 import {Layout, message} from "antd";
-import {FooterComponent, HeaderComponent, SiderTable, TextAreaComponent} from './styles/styles';
+import {FooterComponent, HeaderComponent, SiderTable} from './styles/styles';
 import Editor from "./components/Editor/";
 import {FolderOpenOutlined, PlaySquareOutlined, SaveOutlined} from "@ant-design/icons";
 import Icon from "./components/Icon";
 import {selectCode, setTextCode} from "./store/editor/actions";
 import TableComponent from './components/Table';
 import {IToken} from "./store/table/actions";
-import Console from "./components/Console";
+import Console, { Message, TypeMessage } from "./components/Console";
 
 import Gramatic from './gramatic/Gramatic';
 import Syntatic from './gramatic/Syntatic';
@@ -33,7 +33,7 @@ function App() {
     const inputFileRef = useRef<HTMLInputElement>(null); // Take the ref. of component
 
     const [tokens, setTokens] = useState<IToken[]>([]);
-    const [consoleMessages, setConsoleMessages] = useState<string[]>([]);
+    const [consoleMessages, setConsoleMessages] = useState<Message[]>([]);
 
     useEffect(() => {
         dispatch(createUser());
@@ -78,26 +78,26 @@ function App() {
     };
 
     function handleCompileClick(){
-        setConsoleMessagesState("Initiating application...");
+        setConsoleMessagesState({message: "Initiating application...", type: TypeMessage.INFO});
         setTokens([]);
 
-        setConsoleMessagesState("Initiating lexical analysis...");
+        setConsoleMessagesState({message: "Initiating lexical analysis...", type: TypeMessage.INFO});
         const tokens = handleCompileFile();
         setTokens(tokens);
 
         syntaticClass.analyse(tokens);
-        setConsoleMessages(messages => [...messages, "Initiating syntatic analysis..."]);
+        setConsoleMessagesState({message: "Initiating syntatic analysis...", type: TypeMessage.INFO});
 
 
-        setConsoleMessagesState("Initiating semantic analysis...");
+        setConsoleMessagesState({message: "Initiating semantic analysis...", type: TypeMessage.INFO});
         const semanticClass = new Semantic(tokens);
         semanticClass.validate();
 
-        setConsoleMessages(messages => [...messages, "Compiled!!"]);
+        setConsoleMessagesState({message: "Compiled!!", type: TypeMessage.SUCCESS});
     };
 
-    function setConsoleMessagesState(message: string) {
-        setConsoleMessages(messages => [...messages, message]);
+    function setConsoleMessagesState(message: Message) {
+        setConsoleMessages(messages => [...messages, {message: message.message, type: message.type}]);
     };
 
     function handleCompileFile() {
@@ -238,7 +238,7 @@ function App() {
                     try {
                         handleCompileClick();
                     } catch (e) {
-                        setConsoleMessages(messages => [...messages, e.message]);
+                        setConsoleMessages(messages => [...messages, {message: e.message, type: TypeMessage.ERROR}]);
                         console.log(e)
                     }
                 }}>

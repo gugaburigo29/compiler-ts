@@ -4,13 +4,12 @@ type MapVariables = { [value: string]: IVariable[] };
 
 class Semantic {
     private tokens: IToken[];
-    /* Renomear */
-    private funcaoParam: MapVariables;
+    private parameterFunction: MapVariables;
     private variables: IVariable[];
 
     constructor(tokens: IToken[]) {
         this.tokens = tokens;
-        this.funcaoParam = {};
+        this.parameterFunction = {};
         this.variables = [];
     }
 
@@ -81,7 +80,7 @@ class Semantic {
                         if (token.code === 25) {
                             if (!isFirst) {
                                 procedure = token.word;
-                                procedureVars = this.funcaoParam[procedure];
+                                procedureVars = this.parameterFunction[procedure];
                                 isFirst = true;
                             } else {
                                 if (counter === procedureVars.length && counter !== 0) {
@@ -196,14 +195,11 @@ class Semantic {
         });
 
         this.variables = this.variables.filter(value => value.pos !== position);
-
         const variable = this.variables[this.variables.length - 1];
 
         if (variable.category === "PROCEDURE") {
-            this.funcaoParam[variable.name] = parameters;
-        } else if (parameters.length !== 0) {
-            throw new Error("Semantico " + -1 + " Erro interno ao criar paramentros da funcao");
-        }
+            this.parameterFunction[variable.name] = parameters;
+        } else if (parameters.length !== 0) throw new Error('Semantic: Internal error when creating the function parameters!');
     }
 }
 
