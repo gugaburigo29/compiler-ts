@@ -2,9 +2,9 @@ import React, {useEffect, useRef} from "react";
 import {TextAreaComponent} from "../../styles/styles";
 
 export enum TypeMessage {
-    ERROR = 'ERROR',
-    SUCCESS = 'SUCCESS',
-    INFO = 'INFO'
+    ERROR = 'red',
+    SUCCESS = 'green',
+    INFO = 'black'
 }
 
 export interface Message {
@@ -32,8 +32,7 @@ function Console({messages}: ConsoleProps) {
         {messages.map((val, index) =>
             <div key={index}>
                 <h4
-                    style={val.type === TypeMessage.SUCCESS ? {color: "green"} :
-                           (val.type === TypeMessage.ERROR ? {color: "red"} : {color: "black"})}
+                    style={{color: val.type}}
                 >
                     {val.message}
                 </h4>
