@@ -17,7 +17,7 @@ class Semantic {
     validate() {
         const memo: IVariable[] = [];
 
-        let category = "";
+        let category: VariableType = VariableType.NULL;
         let isProcedure = false;
         let isStart = false;
 
@@ -26,22 +26,20 @@ class Semantic {
 
             switch (token.code) {
                 case 2:
-                    category = "Label"
+                    category = VariableType.LABEL
                     break;
                 case 3:
-                    category = "Constante"
+                    category = VariableType.CONSTANT
                     break;
                 case 4:
-                    category = "Variavel"
+                    category = VariableType.VARIABLE
                     break;
                 case 5:
-                    category = "Procedure"
+                    category = VariableType.PROCEDURE
                     break;
                 case 6:
                     isStart = true;
-                    if (!memo.length) {
-                        console.log('Erro')
-                    }
+                    if (!memo.length) console.log('Error')
                     break;
                 case 7:
                     if (isProcedure) {
@@ -50,15 +48,24 @@ class Semantic {
                     }
                     break;
                 case 8:
-                    for (const iVariable of memo) {
-                        iVariable.tipo = VariableType.INTEGER;
-                        this.insertVariable(iVariable, token);
-                    }
-                    break;
                 case 9:
-                    for (const iVariable of memo) {
-                        iVariable.tipo = VariableType.INTEGER;
-                        this.insertVariable(iVariable, token);
+                case 26:
+                case 48:
+                    let varType : VariableType = VariableType.INTEGER; // 8 and 26
+
+                    switch(token.code){
+                        case 9:
+                            varType = VariableType.ARRAY;
+                            break;
+                        case 48:
+                            varType = VariableType.LITERAL;
+                            break;
+                    }
+                    
+                    while(memo.length) {
+                        let variable = memo.pop()!;
+                        variable.type = varType;
+                        this.insertVariable(variable, token);
                     }
                     break;
                 case 11:
@@ -67,7 +74,7 @@ class Semantic {
                     let procedure = "";
                     let counter = 0;
 
-                    while (token.code != 37) {
+                    while (token.code !== 37) {
                         i++;
                         token = this.tokens[i];
 
@@ -77,44 +84,41 @@ class Semantic {
                                 procedureVars = this.funcaoParam[procedure];
                                 isFirst = true;
                             } else {
-                                if (counter === procedureVars.length && counter != 0) {
-                                    throw new Error(`Semantico ${token.line} Era esperado ${counter} argumentos e foram passados mais.`)
+                                if (counter === procedureVars.length && counter !== 0) {
+                                    throw new Error(`Semantic: Line ${token.line} It was expected ${counter} arguments, but received more.`);
                                 }
 
                                 const parametroEsperado = procedureVars[counter];
                                 const parametroPassado = this.getVariable(token);
 
-                                if (parametroPassado.tipo !== parametroEsperado.tipo) {
-                                    throw new Error("Semantico" + token.line + "Era esperado variável do tipo" + parametroEsperado.tipo + ", porém foi recebido o tipo" + parametroPassado.tipo);
+                                if (parametroPassado.type !== parametroEsperado.type) {
+                                    throw new Error(`Semantic: Line ${token.line}. It was expected variable type: ${parametroEsperado.type}, but got ${parametroPassado.type}.`);
                                 }
                             }
-                        } else if (token.code == 26) {
+                        } else if (token.code === 26) {
                             const parametroEsperado = procedureVars[counter];
 
-                            if (parametroEsperado.tipo !== VariableType.INTEGER) {
-                                throw new Error("Semantico" + token.line + "Era esperado variável do tipo" + parametroEsperado.tipo + ", porém foi recebido o tipo Integer");
+                            if (parametroEsperado.type !== VariableType.INTEGER) {
+                                throw new Error(`Semantic: Line ${token.line}. It was expected variable type: ${parametroEsperado.type}, but got INTEGER.`);
                             }
-                        } else if (token.code == 48) {
+                        } else if (token.code === 48) {
                             const parametroEsperado = procedureVars[counter];
-
-                            if (parametroEsperado.tipo !== VariableType.LITERAL) {
-                                throw new Error("Semantico" + token.line + "Era esperado variável do tipo" + parametroEsperado.tipo + ", porém foi recebido o tipo Literal");
+                            if (parametroEsperado.type !== VariableType.LITERAL) {
+                                throw new Error(`Semantic: Line ${token.line}. It was expected variable type: ${parametroEsperado.type}, but got LITERAL.`);
                             }
-                        } else if (token.code == 46) {
+                        } else if (token.code === 46) {
                             counter++;
                         }
                     }
-
                     counter++;
-
-                    if (counter != procedureVars.length) {
-                        throw new Error("Semantico" + token.line + "Era esperado " + procedureVars.length + " argumentos e foram passados " + counter);
+                    if (counter !== procedureVars.length) {
+                        throw new Error(`Semantic: Line ${token.line}. It was expected ${procedureVars.length} arguments but got ${counter}.`);
                     }
                     break;
                 case 25:
                     if (isStart) {
                         this.getVariable(token);
-                    } else if (!isStart) {
+                    } else {
                         let position: number;
 
                         if (isProcedure) {
@@ -122,17 +126,29 @@ class Semantic {
                         } else {
                             position = 0;
 
-                            if (category == "Procedure") {
-                                const auxVar = {} as IVariable;
+                            if (category === VariableType.PROCEDURE) {
+                                const auxVar : IVariable = {
+                                    pos: 0,
+                                    category,
+                                    type: VariableType.PROCEDURE,
+                                    name: token.word
+                                };
+
                                 isProcedure = true;
-                                auxVar.tipo = VariableType.PROCEDURE;
                                 this.insertVariable(auxVar, token);
-                                category = "Parameter";
+                                category = VariableType.PARAMETER;
+                                
                                 break;
-                            } else if (category == "Label") {
-                                const auxVar = {} as IVariable;
-                                auxVar.tipo = VariableType.LABEL;
+                            } else if (category === VariableType.LABEL) {
+                                const auxVar : IVariable = {
+                                    pos: 0,
+                                    category,
+                                    type: VariableType.LABEL,
+                                    name: token.word
+                                };
+
                                 this.insertVariable(auxVar, token);
+                                
                                 break;
                             }
                         }
@@ -140,21 +156,9 @@ class Semantic {
                         memo.push({
                             pos: position,
                             name: token.word,
-                            tipo: undefined,
+                            type: VariableType.NULL,
                             category
                         });
-                    }
-                    break;
-                case 26:
-                    for (let iVariable of memo) {
-                        const auxVariable: IVariable = {...iVariable, tipo: VariableType.INTEGER};
-                        this.insertVariable(auxVariable, token);
-                    }
-                    break;
-                case 48:
-                    for (let iVariable of memo) {
-                        const auxVariable: IVariable = {...iVariable, tipo: VariableType.LITERAL};
-                        this.insertVariable(auxVariable, token);
                     }
                     break;
             }
@@ -162,41 +166,43 @@ class Semantic {
     }
 
     private getVariable(token: IToken): IVariable {
-        const variable = this.variables.find(value => value.name.toUpperCase() == token.word.toUpperCase());
+        const variable = this.variables.find(value => value.name.toUpperCase() === token.word.toUpperCase());
 
         if (!variable) {
-            throw new Error("Semantico " + token.line + "O identificador '" + token.word + "' não foi declarado.");
+            throw new Error(`Semantic: Line ${token.line}. The identifier '${token.word}' was not declared!!`);
         }
 
         return variable;
     }
 
     private insertVariable(variable: IVariable, token: IToken) {
-        for (const _variable of this.variables) {
-            const isSameName = _variable.name.toUpperCase() === variable.name.toUpperCase();
-            const isSamePosition = _variable.pos === variable.pos;
 
-            if (isSameName && isSamePosition) {
-                throw new Error("Semantico" + token.line + "O identificador '" + token.word + "' já foi declarado");
-            }
+        const duplicateVariable = this.variables.find(v => v.name.toUpperCase() === variable.name.toUpperCase() && v.pos === variable.pos) || null;
+
+        if(duplicateVariable){
+            throw new Error(`Semantic: Line ${token.line}. The identifier '${variable.name}' was already been declared!!`);
         }
 
         this.variables.push(variable);
     }
 
     private deleteVariable(position: number) {
+        debugger
         const parameters = this.variables.filter(value => {
-            const isSamePosition = value.pos == position;
-            const isSameCategory = value.category = "Parameter";
+            const isSamePosition = value.pos === position;
+            const isSameCategory = value.category === "PARAMETER";
+
             return isSamePosition && isSameCategory;
         });
 
+        this.variables = this.variables.filter(value => value.pos !== position);
+
         const variable = this.variables[this.variables.length - 1];
 
-        if (variable.category == "Procedure") {
+        if (variable.category === "PROCEDURE") {
             this.funcaoParam[variable.name] = parameters;
-        } else if (parameters.length != 0) {
-            throw new Error("Semantico " + -1 + " Erro interno ao criar paramentros da fun��o");
+        } else if (parameters.length !== 0) {
+            throw new Error("Semantico " + -1 + " Erro interno ao criar paramentros da funcao");
         }
     }
 }
