@@ -25,7 +25,8 @@ export enum VariableType {
     LABEL = 'LABEL',
     CONSTANT = 'CONSTANT',
     VARIABLE = 'VARIABLE',
-    PARAMETER = 'PARAMETER'
+    PARAMETER = 'PARAMETER',
+    PROGRAM_NAME = 'PROGRAM_NAME'
 }
 
 export const setText = (token: IToken): AppThunk => async dispatch => {

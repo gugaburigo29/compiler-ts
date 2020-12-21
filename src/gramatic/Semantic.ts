@@ -22,6 +22,7 @@ class Semantic {
 
         for (let i = 0; i < this.tokens.length; i++) {
             let token = this.tokens[i];
+            let isProgramName = i === 1; // the program name
 
             switch (token.code) {
                 case 2:
@@ -44,6 +45,7 @@ class Semantic {
                     if (isProcedure) {
                         isProcedure = false;
                         this.deleteVariable(1);
+                        isStart = false;
                     }
                     break;
                 case 8:
@@ -83,13 +85,12 @@ class Semantic {
                                 procedureVars = this.parameterFunction[procedure];
                                 isFirst = true;
                             } else {
-                                debugger
                                 if (counter === procedureVars.length && counter !== 0) {
                                     throw new Error(`Semantic: Line ${token.line} It was expected ${counter} arguments, but received more.`);
                                 }
 
                                 const parametroEsperado = procedureVars[counter];
-                                const parametroPassado = this.getVariable(token);
+                                const parametroPassado = this.checkVariable(token, i, isStart);
 
                                 if (parametroPassado.type !== parametroEsperado.type) {
                                     throw new Error(`Semantic: Line ${token.line}. It was expected variable type: ${parametroEsperado.type}, but got ${parametroPassado.type}.`);
@@ -117,7 +118,7 @@ class Semantic {
                     break;
                 case 25:
                     if (isStart) {
-                        this.getVariable(token);
+                        this.checkVariable(token, i, isStart);
                     } else {
                         let position: number;
 
@@ -150,6 +151,17 @@ class Semantic {
                                 this.insertVariable(auxVar, token);
                                 
                                 break;
+                            } else if(isProgramName){
+                                const auxVar : IVariable = {
+                                    pos: 0,
+                                    category,
+                                    type: VariableType.PROGRAM_NAME,
+                                    name: token.word
+                                };
+
+                                this.insertVariable(auxVar, token);
+                                
+                                break;
                             }
                         }
 
@@ -165,6 +177,14 @@ class Semantic {
         }
     }
 
+    private checkVariable(token: IToken, index: number, isStart = false): IVariable{
+        const variable = this.getVariable(token);
+
+        this.checkTheAtribuittion(token, index, variable, isStart);
+
+        return variable;
+    }
+
     private getVariable(token: IToken): IVariable {
         const variable = this.variables.find(value => value.name.toUpperCase() === token.word.toUpperCase());
 
@@ -173,6 +193,32 @@ class Semantic {
         }
 
         return variable;
+    }
+
+    private checkTheAtribuittion(token: IToken, index: number, variableToken: IVariable, isStart: boolean): boolean{
+        const auxTokens = this.tokens.filter((value, pos) => { 
+            return pos > index && value.line === token.line
+        });
+        const atribuittion = auxTokens.find(p => p.word === ":=");
+
+        if(atribuittion) {
+            if(variableToken.category === VariableType.CONSTANT && isStart){
+                throw new Error(`Semantic: Line ${token.line}. It is not possible to change the value of a CONSTANT!!`);
+            }
+
+            auxTokens.forEach((value) => {
+                if(value !== atribuittion) {
+                    const variable = this.variables.find(val => val.name.toUpperCase() === value.word.toUpperCase());
+                    if(variable) {
+                        if(variable.type !== variableToken.type){
+                            throw new Error(`Semantic: Line ${token.line}. The atribuittion is wrong, it was expected ${variableToken.type}, but got ${variable.type}!!`);
+                        }
+                    }
+                }
+            });
+        }
+
+        return true;
     }
 
     private insertVariable(variable: IVariable, token: IToken) {
